@@ -1,0 +1,1584 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Annie's Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,700;1,6..72,400&family=Inter+Tight:wght@400;500;600&family=DM+Mono:ital,wght@0,400;0,500;1,400;1,500&display=swap">
+<style>
+/* Layout: a clean index on a flat warm-grey ground. Hairline rules frame the intro stage, with (00n) labels in the corners.
+   Flat, crisp circles in a muted palette; overlaps mix by multiply. One committed light look. */
+:root {
+  color-scheme: light;
+  --bg: #FCCDB4;        /* peach blush */
+  --ink: #031927;       /* deep navy type */
+  --muted: #031927;
+  --venn-line: #EADBC4; /* beige Venn borders */
+  --venn-label: #031927;
+  --line: #2A1414;
+  --hair: #D49C82;
+  --dark: #2B0A0A;      /* text that sits on light fills */
+  --wear: #6B1E24;      /* oxblood */
+  --me: #7D7A45;        /* olive */
+  --ux: #FAF0E2;        /* cream */
+  --oxblood: #5C1218;
+  --olive: #B9C27A;
+  --font-display: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-serif: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-mono: "DM Mono", ui-monospace, Menlo, monospace;
+  --fs-line: clamp(20px, 2.6vw, 28px); /* shared size for the supporting intro lines */
+  --ease: cubic-bezier(.2,.7,.2,1);
+  --dur: 900ms;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body {
+  color: var(--ink); font-family: var(--font-display); font-size: 16px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+h1, h2, h3, p { margin: 0; }
+h1, h2, h3 { font-weight: 500; text-wrap: balance; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 1px solid var(--ink); outline-offset: 4px; }
+.mono { font-family: var(--font-mono); font-size: 12px; letter-spacing: .02em; color: var(--muted); }
+.serif { font-family: var(--font-serif); font-style: normal; font-weight: 400; }
+.dot-c { display: inline-block; border-radius: 50%; background: var(--c); flex: none; }
+
+/* ---------- Intro stage ---------- */
+html { overflow-x: clip; } /* page centering is a gentle scripted glide (see "Gentle snap"), not CSS scroll-snap */
+body { overflow-x: clip; }
+.stage { max-width: 1200px; margin: 0 auto; }
+.bar { position: absolute; left: 0; right: 0; z-index: 3; display: flex; justify-content: space-between; align-items: center;
+  font-size: 14px; font-weight: 500; padding-block: 14px; }
+.bar.top { top: 0; border-bottom: 1px solid var(--line); }
+.bar.bottom { bottom: 0; border-top: 1px solid var(--hair); }.bar .lbl { display: inline-block; transition: opacity 300ms, transform 300ms var(--ease); }
+.bar .lbl.swap { opacity: 0; transform: translateY(-6px); }
+.bar .caps { text-transform: uppercase; letter-spacing: .02em; }
+
+.step { position: relative; min-height: 100svh; padding-block: 64px; display: grid; place-items: center; text-align: center; scroll-snap-align: start; }
+/* After the intro finishes, pages tighten up */
+/* only the name and studies pages pull together; polaroids and Venn keep their full screens */
+/* The two halves each take half the screen and meet in the middle, so the block sits centered at any window size */
+.stage.compact .step:nth-child(1) { min-height: var(--h1, 50svh); padding-block: 0 9px; align-items: end; }
+.stage.compact .step:nth-child(2) { min-height: var(--h2, 50svh); padding-block: 9px 0; align-items: start; }
+.stage .hello .row.name-short, .stage.compact .hello .row.name-full { display: none; }
+.stage.compact .hello .row.name-short { display: flex; }
+.stage.compact .hello { font-weight: 400; font-size: var(--fs-line); letter-spacing: 0; line-height: 1.2; } /* matches "Student at Stanford" */
+/* Polaroid + Venn pages: each fills the window and its content sits centered between the top and bottom bars */
+.stage .step:nth-child(3), .stage .step:nth-child(4) { scroll-snap-align: center; }
+.stage.compact .step:nth-child(1), .stage.compact .step:nth-child(2) { scroll-snap-align: none; }
+body.bars-on .stage .step:nth-child(3), body.bars-on .stage .step:nth-child(4) { min-height: 100svh; padding-block: 72px 80px; }
+body.bars-on .venn { max-height: calc(100svh - 250px); }
+/* smooth resize when the bars arrive */
+.venn { transition: max-height 1100ms cubic-bezier(.65,0,.35,1); }
+.stage .step:nth-child(3), .stage .step:nth-child(4) { transition: padding 1100ms cubic-bezier(.65,0,.35,1); }
+
+.hello { font-size: clamp(40px, 10vw, 136px); white-space: nowrap; letter-spacing: -.03em; line-height: .92; display: grid; justify-items: center; }
+.hello .row { display: flex; align-items: center; gap: .14em; }
+.hello .dot-c { width: .62em; height: .62em; }
+
+.study { display: grid; gap: 18px; justify-items: center; }
+.study .big { font-size: clamp(36px, 6.4vw, 80px); letter-spacing: -.04em; line-height: 1; max-width: 14ch; }
+.study .small { font-size: var(--fs-line); }
+.study .serif { font-size: 1em; }
+
+.passion { display: grid; gap: 20px; justify-items: center; width: min(100%, 760px); }
+.passion-lead { font-size: var(--fs-line); position: relative; top: 8px; } /* nudged 8px down toward the polaroids */
+/* Polaroids: pop up one at a time */
+.polaroids { list-style: none; margin: 31px 0 32px; padding: 0; display: flex; justify-content: center; align-items: flex-start; }
+.pol { width: clamp(120px, 27vw, 300px); margin-inline: clamp(-16px, -1.2vw, -6px); background: #F7F7F4;
+  border: 1px solid #E4E3DE; padding: 5.5% 5.5% 0; display: grid;
+  box-shadow: 0 8px 20px rgb(3 25 39 / .14), 0 1px 2px rgb(3 25 39 / .10);
+  opacity: 0; transform: rotate(var(--r));
+  transition: opacity 1ms linear; } /* appears instantly (no fade), still one at a time */
+.pol:nth-child(2) { margin-top: 32px; z-index: 1; }
+.pol:nth-child(3) { margin-top: 10px; }
+.pol .photo { aspect-ratio: 99 / 62; max-width: 100%; background: #0B0B0D; display: grid; place-items: center; overflow: hidden; }
+.pol .photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* Annie's own polaroid images (frame included) — no extra frame added; caption sits in each photo's bottom strip */
+.pol.pol-mini, .pol.pol-square, .pol.pol-wide { position: relative; background: none; border: 0; padding: 0; box-shadow: none; }
+.pol.pol-mini { width: clamp(84px, 17vw, 190px); margin-right: clamp(6px, 1.4vw, 16px); } /* less overlap with Wearables */
+.pol.pol-square { width: clamp(104px, 21vw, 235px); }
+.pol.pol-wide { width: clamp(132px, 27vw, 300px); }
+.pol .pol-img { display: block; width: 100%; height: auto; max-width: 100%; border-radius: 4px;
+  box-shadow: 0 2px 5px rgb(3 25 39 / .20), 0 1px 1.5px rgb(3 25 39 / .16); } /* tight shadow, close behind the print */
+.pol.pol-mini .cap, .pol.pol-square .cap, .pol.pol-wide .cap { position: absolute; left: 0; right: 0; top: var(--ct); bottom: var(--cb);
+  margin: 0; padding: 0 6%; border: 0; display: flex; align-items: center; justify-content: center;
+  font-size: min(1.45vw, 16px, var(--fit)); line-height: 1.15; text-align: center; white-space: nowrap; overflow: hidden; }
+/* each polaroid is its own size reference, so the caption can never grow past the photo's edges */
+.pol.pol-mini, .pol.pol-square, .pol.pol-wide { container-type: inline-size; }
+.pol.pol-mini { --fit: 10.5cqi; }   /* "Engineering" (longest line) */
+.pol.pol-square { --fit: 12cqi; }   /* "Wearables" */
+.pol.pol-wide { --fit: 7.2cqi; }    /* "Customer Experience" */
+.pol .photo .mono { display: none; }
+.pol .cap { font-family: var(--font-mono); font-weight: 400; color: #031927; font-size: clamp(11px, 1.4vw, 17px);
+  letter-spacing: -.01em; line-height: 1.15; text-align: center; padding: 7% 4% 8%; border-top: 1px solid #EDECE8; margin-top: 5.5%; }
+.is-current .pol { opacity: 1; }
+.is-current .pol:nth-child(1) { transition-delay: 1100ms; }
+.is-current .pol:nth-child(2) { transition-delay: 2200ms; }
+.is-current .pol:nth-child(3) { transition-delay: 3400ms; }
+.passion-tail strong { font-weight: 700; }
+/* once the visitor scrolls on their own, the polaroid page shows everything at once */
+.step.instant .pol, .step.instant .passion-tail { transition: none !important; }
+.passion-list { list-style: none; margin: 0; padding: 0; width: 100%; border-top: 1px solid var(--line); }
+.passion-list li { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px; text-align: left;
+  border-bottom: 1px solid var(--line); padding-block: 12px;
+  font-size: clamp(28px, 5vw, 56px); letter-spacing: -.035em; line-height: 1.1;
+  opacity: 0; transform: translateY(16px); transition: opacity 600ms var(--ease), transform 600ms var(--ease); }
+.passion-list li .n { font-family: var(--font-display); font-size: 14px; letter-spacing: 0; font-weight: 500; }
+.passion-list li .dot-c { width: .5em; height: .5em; }
+.is-current .passion-list li { opacity: 1; transform: none; }
+.is-current .passion-list li:nth-child(1) { transition-delay: 200ms; }
+.is-current .passion-list li:nth-child(2) { transition-delay: 450ms; }
+.is-current .passion-list li:nth-child(3) { transition-delay: 700ms; }
+.passion-tail { font-size: var(--fs-line); opacity: 0; transition: opacity 1200ms ease 4900ms; }
+.is-current .passion-tail { opacity: 1; }
+.passion-tail .serif { font-size: 1em; }
+
+/* ---------- Venn ---------- */
+.venn-wrap { width: 100%; display: grid; gap: 6px; justify-items: center; }
+.venn { width: min(100%, 620px); max-height: calc(100svh - 190px); height: auto; overflow: visible; cursor: default; }
+.venn .fill { opacity: 0; transition: opacity 900ms var(--ease); }
+.is-current .venn .fill { opacity: 1; transition-delay: 900ms; }
+.venn .ring { fill: none; stroke: var(--venn-line); stroke-width: 1.5; stroke-dasharray: 950; stroke-dashoffset: 950; transition: stroke-dashoffset 1200ms var(--ease); }
+.is-current .venn .ring { stroke-dashoffset: 0; }
+.is-current .venn .ring.r2 { transition-delay: 150ms; }
+.is-current .venn .ring.r3 { transition-delay: 300ms; }
+.venn .region rect { opacity: 0; transition: opacity 200ms ease; }
+.venn .region.on rect { opacity: .22; }
+.venn .fade { opacity: 0; transition: opacity 600ms var(--ease); }
+.is-current .venn .fade { opacity: 1; transition-delay: 1200ms; }
+.is-current .venn .fade.late { transition-delay: 1500ms; }
+.venn .set-label { font-family: var(--font-display); font-weight: 500; font-size: 14px; letter-spacing: .02em; fill: var(--venn-label); }
+.venn .item { font-family: var(--font-display); font-weight: 500; font-size: 14px; fill: var(--dark); cursor: pointer; }
+.venn .item:hover, .venn .item:focus-visible { text-decoration: underline; outline: none; }
+.venn .item:focus, .venn .item:focus-visible { outline: none; box-shadow: none; -webkit-tap-highlight-color: transparent; } /* no box after a click */
+.venn { -webkit-tap-highlight-color: transparent; }
+.venn .hcd { font-family: var(--font-serif); font-style: italic; font-size: 14px; font-weight: 400; letter-spacing: .05em; fill: var(--dark); }
+/* one line under the diagram: the hint first, then the project filters; hovering a region swaps its name in */
+.cap-slot { display: grid; justify-items: center; margin-top: 16px; min-height: 1.6em; }
+.cap-slot > * { grid-area: 1 / 1; align-self: center; }
+.venn-caption { min-height: 1.6em; transition: opacity 220ms ease; }
+.venn-filters { opacity: 0; visibility: hidden; transition: opacity 450ms ease, visibility 0s 450ms; }
+.cap-slot.filters-on .venn-filters { opacity: 1; visibility: visible; transition: opacity 450ms ease; }
+.cap-slot.filters-on .venn-caption { opacity: 0 !important; }
+.cap-slot.filters-on.hovering .venn-caption { opacity: 1 !important; }
+.cap-slot.filters-on.hovering .venn-filters { opacity: 0; visibility: hidden; transition: opacity 220ms ease, visibility 0s 220ms; }
+.venn-filters .chips, .venn-filters .chips.stacked, .venn-filters .chips.stacked .chip:first-child { justify-content: center; }
+/* All Venn text uses the typewriter face */
+.venn .item, .venn .hcd { font-family: var(--font-mono); }
+.venn .item { font-size: 14.5px; font-weight: 400; }
+.venn .set-label { font-size: 17px; }
+.venn .hcd { font-size: 14.5px; font-weight: 500; font-style: italic; letter-spacing: .06em; }
+
+.dots { display: flex; gap: 8px; }
+.dot { width: 9px; height: 9px; border-radius: 50%; border: 1px solid var(--ink); background: transparent; cursor: pointer; padding: 0; transition: background 250ms; }
+.dot[aria-current="true"] { background: var(--ink); }
+.ctls { display: flex; align-items: center; gap: 18px; }
+.ctl { background: none; border: 0; cursor: pointer; padding: 4px 0; }
+.ctl:hover { color: var(--ink); }
+
+/* ---------- Index ---------- */
+.section { max-width: 1200px; margin: 0 auto; padding-block: 12px 88px; display: grid; gap: 36px; }
+.section-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 16px;
+  border-bottom: 1px solid var(--line); padding-bottom: 14px; }
+.section-head h2 { font-size: 14px; text-transform: uppercase; letter-spacing: .02em; }
+.chips { display: flex; flex-wrap: nowrap; gap: 10px 20px; flex: 0 0 auto; }
+.chip { white-space: nowrap; flex: 0 0 auto; }
+/* when the four don't fit on one line inside the side margins, "all projects" takes its own line (set by script) */
+/* tighten spacing on narrow screens so all four still fit on one line down to 501px */
+@media (max-width: 720px) { .chips { gap: 10px 14px; } .chip { font-size: 12px; gap: 6px; } }
+.chips.stacked { flex: 1 1 100%; flex-wrap: wrap; gap: 10px 18px; }
+.chips.stacked .chip:first-child { flex-basis: 100%; justify-content: flex-start; }
+.chip { border: 0; background: none; padding: 2px 0; font-family: var(--font-mono); font-size: 13px; color: var(--muted); cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+.chip .dot-c { width: 9px; height: 9px; }
+.chip[aria-pressed="true"] { color: var(--ink); text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 1px; }
+.filter-note { margin: 0 0 16px; }
+/* project cards stay folded away until a filter is picked; picking the underlined one again folds them back */
+#projects { gap: 0; transition: padding-bottom 650ms cubic-bezier(.65,0,.35,1); }
+#projects:not(:has(.proj-wrap.open)) { padding-bottom: 0; border-bottom-color: transparent; }
+/* the line over the cards lands exactly on the top bar's line when you jump to Projects */
+#projects { padding-top: 0; box-sizing: border-box; min-height: 0; transition: padding 650ms cubic-bezier(.65,0,.35,1), min-height 650ms cubic-bezier(.65,0,.35,1); }
+/* open: at least one screen tall between the bars, so the divider under the cards lands on the bottom bar's line */
+#projects:has(.proj-wrap.open) { min-height: calc(100svh - var(--nvh, 64px) - var(--bbh, 72px) + 2px); }
+#projects.section { scroll-margin-top: calc(var(--nvh, 64px) - 1px); }
+.proj-head { margin: 0 0 30px; } /* filter row sits inside the partition, above the cards */
+/* By field / By skill: two manila tabs heading the project window */
+.vtabs { display: flex; gap: 3px; padding-left: 4px; align-items: flex-end; border-bottom: 1px solid var(--line); margin-bottom: 18px; }
+.vtab { font-family: var(--font-display); font-size: 17px; line-height: 1.15; color: var(--ink); text-align: left; background: #E2BE80;
+  border: 0; border-radius: 7px 7px 0 0; padding: 8px 16px 7px; cursor: pointer; transition: padding 200ms var(--ease), background-color 200ms ease; }
+.vtab small { display: block; font-family: var(--font-mono); font-size: 10.5px; opacity: .72; margin-top: 2px; }
+.vtab[aria-pressed="true"] { background: #F3DFB5; padding-top: 11px; }
+.vtab:not([aria-pressed="true"]):hover { filter: brightness(1.03); }
+/* by project / by skill */
+/* "view by project / skill" — one serif face and size throughout, like the top bar */
+.view-mode { display: flex; align-items: baseline; gap: 10px; margin-bottom: 16px; font-family: var(--font-display); font-size: 20px; color: var(--ink); }
+.view-mode .sv-btn { font-family: inherit; font-size: inherit; transition: opacity 200ms ease; }
+.view-mode .sl { opacity: .35; }
+.sv-btn { font-family: var(--font-mono); font-size: 13px; color: var(--ink); background: none; border: 0; padding: 2px 0; cursor: pointer; }
+.sv-btn[aria-pressed="true"] { text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 1px; }
+.sv-btn:not([aria-pressed="true"]):hover { text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 1px; text-decoration-color: rgb(3 25 39 / .3); }
+.view-mode .sv-btn:not([aria-pressed="true"]) { opacity: .45; }
+.fam-row, .sk-row { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+.fam-row { margin-bottom: 10px; }
+.fam-row .sv-btn { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; }
+.fam-row .sv-btn:not([aria-pressed="true"]) { opacity: .55; }
+.skill-results { display: grid; }
+#chips[hidden], #grid[hidden], #skill-nav[hidden], #skill-results[hidden], #sk-row[hidden] { display: none !important; }
+/* two labeled ways in: by field (cards) and by skill (write-ups); the row not in use fades back */
+.browse-row { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 14px; align-items: baseline; padding-block: 8px; transition: opacity 250ms ease; }
+.browse-row + .browse-row { border-top: 1px dashed var(--hair); }
+.browse-lab { font-family: var(--font-mono); font-size: 11px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: var(--ink); }
+.browse-row.dim .chips, .browse-row.dim .fam-row { opacity: .5; }
+.browse-row .fam-row { margin-bottom: 0; }
+.browse-row .sk-row { margin-top: 10px; }
+@media (max-width: 560px) { .browse-row { grid-template-columns: 1fr; gap: 6px; } }
+.sk-grp { display: grid; grid-template-columns: minmax(0, 220px) minmax(0, 1fr); gap: 28px; padding: 20px 0; border-bottom: 1px solid var(--hair); }
+.sk-grp:first-child { padding-top: 0; }
+.sk-pj { background: none; border: 0; padding: 0; text-align: left; cursor: pointer; color: var(--ink); align-self: start; }
+.sk-pj b { display: block; font-family: var(--font-display); font-weight: 500; font-size: 19px; line-height: 1.2; }
+.sk-pj:hover b { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+.sk-pj span { font-family: var(--font-mono); font-size: 12px; display: flex; align-items: center; gap: 7px; margin-top: 6px; }
+.sk-pj .dot-c { width: 9px; height: 9px; }
+.sk-blks { display: grid; gap: 16px; }
+.sk-sub { font-family: var(--font-mono); font-size: 12px; margin: 0 0 4px; color: var(--muted); }
+.sk-txt { margin: 0; font-size: 15px; line-height: 1.6; max-width: 64ch; }
+@media (max-width: 640px) { .sk-grp { grid-template-columns: 1fr; gap: 10px; } }
+.proj-in { border-top: 1px solid transparent; } /* invisible, but still marks where the window lines up under the top bar */
+#projects { transition: padding 650ms cubic-bezier(.65,0,.35,1); }
+ /* folded: only the line under the filters */
+.proj-wrap { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 650ms cubic-bezier(.65,0,.35,1); }
+.proj-wrap.open { grid-template-rows: 1fr; }
+.proj-in { min-height: 0; overflow: hidden; padding-top: 28px; }
+.proj-wrap:not(.open) .proj-in { visibility: hidden; transition: visibility 0s 650ms; }
+.chip:not([aria-pressed="true"]):hover { color: var(--ink); text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 1px; text-decoration-color: rgb(3 25 39 / .3); }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 48px 28px; }
+.card { position: relative; border: 0; background: none; padding: 0; text-align: left; cursor: pointer; display: grid; gap: 10px; align-content: start; }
+.card .idx { font-family: var(--font-mono); font-size: 12px; color: var(--ink); }
+.card .sheet { position: relative; aspect-ratio: 4 / 5; max-width: 100%; background: var(--c); display: grid; place-items: center; overflow: visible; }
+.card .window { background: var(--bg); display: grid; place-items: center; overflow: hidden; transition: transform 400ms var(--ease); }
+.card .window img { width: 100%; height: 100%; object-fit: cover; }
+.card .window.circle { border-radius: 50%; width: 64%; aspect-ratio: 1; }
+.card .window.rect { width: 64%; height: 64%; }
+.card .window.pill { border-radius: 999px; width: 70%; height: 38%; }
+.card .window.arch { border-radius: 999px 999px 0 0; width: 56%; height: 66%; }
+.card .tab { position: absolute; width: 26px; height: 26px; right: -10px; bottom: -10px; z-index: 2; }
+.card:hover .window, .card:focus-visible .window { transform: scale(1.04); }
+.card .foot { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; border-top: 1px solid var(--line); padding-top: 10px; margin-top: 6px; }
+.card h3 { font-size: 17px; letter-spacing: -.01em; }
+.empty { color: var(--muted); }
+
+/* ---------- Drawer ---------- */
+/* ---------- About ---------- */
+#projects { padding-bottom: 26px; border-bottom: 1px solid transparent; } /* invisible divider after the cards: keeps the window's height/position, no line */
+/* About fills the screen between the top and bottom bars, content centered, like the intro pages */
+#about { scroll-margin-top: var(--nvh, 64px); padding-top: 40px; padding-bottom: 40px; gap: 0;
+  min-height: calc(100svh - var(--nvh, 64px) - var(--bbh, 72px)); align-content: center; }
+.about-top { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 40px; align-items: center; } /* bio centered against the portrait */
+.about-bio { display: grid; gap: 18px; max-width: 60ch; }
+.about-title { font-family: var(--font-display); font-weight: 400; font-size: var(--fs-line); }
+.bio { font-size: clamp(18px, 2vw, 22px); line-height: 1.5; margin: 0; }
+.currently { margin: 0; font-family: var(--font-display); font-size: clamp(18px, 2vw, 22px); line-height: 1.5; }
+/* "this" pop-up: a polaroid that fades in; click anywhere outside it to close */
+dialog.wip { border: 0; padding: 0; background: transparent; overflow: visible; max-width: 100%; }
+dialog.wip::backdrop { background: rgb(3 25 39 / .35); }
+.wip-card { margin: 0; width: min(440px, 86vw); background: #FBF8F3; border: 1px solid #E4E3DE; padding: 5% 5% 0; transform: rotate(-2deg);
+  box-shadow: 0 18px 40px rgb(3 25 39 / .22), 0 2px 4px rgb(3 25 39 / .12); }
+.wip-photo { aspect-ratio: 4 / 3; max-width: 100%; background: #0B0B0D; display: grid; place-items: center; overflow: hidden; }
+.wip-photo img { width: 100%; height: 100%; object-fit: cover; }
+.wip-photo:has(img) { aspect-ratio: auto; background: none; }
+.wip-photo:has(img) img { height: auto; display: block; border: 2px solid #0B0B0D; box-sizing: border-box; }
+/* stays ≥70px from every screen edge (height ≈ 0.95 × width once tilted, plus the caption line) */
+.wip-card:has(.wip-photo img) { width: min(640px, calc(100vw - 140px), calc((100vh - 160px) / 0.95)); }
+.wip-photo .mono { color: rgb(255 255 255 / .45); }
+.wip-card figcaption { font-family: var(--font-mono); font-size: 14px; color: #031927; text-align: center; padding: 6% 4% 8%; }
+.portrait { margin: 0; width: clamp(200px, 28vw, 330px); transform: rotate(3deg); }
+@media (min-width: 601px) { .portrait { margin-right: 75px; } .about-bio { padding-left: 50px; } } /* shifted 100px in from the right edge */
+.portrait-img { display: block; width: 100%; height: auto; border-radius: 4px;
+  box-shadow: 0 2px 5px rgb(3 25 39 / .20), 0 1px 1.5px rgb(3 25 39 / .16); } /* her own frame; same tight shadow as the intro polaroids */
+.portrait-photo { aspect-ratio: 4 / 5; max-width: 100%; background: #0B0B0D; display: grid; place-items: center; overflow: hidden; }
+.portrait-photo img { width: 100%; height: 100%; object-fit: cover; }
+.portrait-photo .mono { color: rgb(255 255 255 / .45); }
+.portrait figcaption { font-family: var(--font-mono); font-size: 13px; color: #031927; text-align: center; padding: 12% 0 14%; }
+.about-block { display: grid; gap: 16px; }
+.about-sub { font-family: var(--font-mono); font-weight: 400; font-size: 13px; letter-spacing: .04em; text-transform: lowercase; border-bottom: 1px solid var(--line); padding-bottom: 10px; }
+
+/* Hobby links + drop-down panels */
+.hob { font: inherit; color: var(--ink); background: none; border: 0; padding: 0; cursor: pointer;
+  text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 1px; }
+.hob:hover, .hob[aria-expanded="true"] { text-decoration-thickness: 2px; }
+.hob-panels { display: grid; }
+.hob-panel { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows 520ms cubic-bezier(.65,0,.35,1), opacity 300ms ease; }
+.hob-panel.open { grid-template-rows: 1fr; opacity: 1; transition: grid-template-rows 520ms cubic-bezier(.65,0,.35,1), opacity 400ms ease 120ms; }
+.hob-inner { min-height: 0; overflow: hidden; }
+.hob-panel.open .hob-inner { padding-block: 32px 8px; }
+.hob-head { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line); padding-bottom: 10px; margin-bottom: 16px; }
+.hob-head .mono { color: var(--ink); font-size: 13px; }
+.hob-close { background: none; border: 1px solid var(--ink); border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-size: 12px; color: var(--ink); }
+.hob-close:hover { background: var(--ink); color: var(--bg); }
+.hob-head-r { display: flex; align-items: center; gap: 18px; }
+.hob-link { color: var(--ink); text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+.hob-link:hover { text-decoration-thickness: 2px; }
+.cello-hl { font-family: var(--font-display); font-style: italic; font-size: 16px; line-height: 1.55; margin: 0 0 6px; max-width: 68ch; }
+/* Drawings: manila folder with category tabs */
+.dtabs { display: flex; gap: 3px; padding-left: 10px; flex-wrap: wrap; align-items: flex-end; }
+.dtab { font-family: var(--font-mono); font-size: 12px; color: var(--ink); background: #E2BE80; border: 0; border-radius: 7px 7px 0 0; padding: 7px 14px 6px; cursor: pointer; display: flex; gap: 8px; align-items: baseline; }
+.dtab span { font-size: 11px; opacity: .7; }
+.dtab[aria-selected="true"] { background: #F3DFB5; padding-top: 9px; }
+.dfolder { background: #F3DFB5; border-radius: 8px; padding: 18px; border-bottom: 3px solid #E2BE80; }
+.drawings { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr)); gap: 22px 16px; padding-top: 6px; }
+.d-it { all: unset; cursor: pointer; display: block; position: relative; transition: transform 220ms var(--ease); }
+.d-it:hover, .d-it:focus-visible { transform: translateY(-3px) rotate(0deg) !important; }
+.d-it .clip { position: absolute; top: -9px; left: 16px; width: 10px; height: 28px; border: 2px solid #8C8C88; border-bottom-color: transparent; border-radius: 6px; z-index: 1; }
+.d-paper { aspect-ratio: 4 / 5; background: #FBF8F3; border: 1px solid #E4E3DE; overflow: hidden; display: grid; place-items: center; }
+.d-paper img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.d-it .nm { font-family: var(--font-mono); font-size: 11px; margin-top: 7px; line-height: 1.4; }
+.d-empty { font-family: var(--font-mono); font-size: 12px; padding: 28px 4px; text-align: center; }
+.d-view { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 22px; align-items: start; }
+.d-view .d-full { justify-self: start; max-width: 100%; }
+.d-view .d-full img { display: block; width: auto; height: auto; max-width: 100%; max-height: 72vh; border: 1px solid #E4E3DE; }
+.d-meta .d-cat { font-family: var(--font-mono); font-size: 11px; opacity: .7; }
+.d-meta h3 { font-family: var(--font-serif); font-weight: 400; font-size: 26px; line-height: 1.15; margin: 4px 0 10px; }
+.d-meta .d-date { font-family: var(--font-mono); font-size: 12px; margin: 0 0 18px; }
+.d-ctr { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.d-ctr .count { font-family: var(--font-mono); font-size: 11px; margin-left: auto; }
+.d-strip { display: flex; gap: 8px; margin-top: 18px; padding-top: 14px; border-top: 1px dashed #D2AE72; flex-wrap: wrap; }
+.d-strip button { all: unset; cursor: pointer; width: 46px; aspect-ratio: 4 / 5; background: #FBF8F3 center / cover no-repeat; border: 1px solid #E4E3DE; opacity: .55; }
+.d-strip button[aria-current="true"] { opacity: 1; outline: 1.5px solid var(--ink); outline-offset: 2px; }
+@media (max-width: 600px) { .d-view { grid-template-columns: 1fr; } }
+
+/* Film contact sheet */
+.contact-sheet { position: relative; background: #171513; padding: 30px 14px; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 170px), 1fr)); gap: 18px 10px; }
+.contact-sheet::before, .contact-sheet::after { content: ""; position: absolute; left: 10px; right: 10px; height: 10px;
+  background: repeating-linear-gradient(90deg, #EDE6DA 0 9px, transparent 9px 22px); opacity: .85; border-radius: 1px; }
+.contact-sheet::before { top: 10px; }
+.contact-sheet::after { bottom: 10px; }
+.frame { display: grid; gap: 6px; margin: 0; }
+.frame .shot { aspect-ratio: 3 / 2; max-width: 100%; background: #2B2724; overflow: hidden; display: grid; place-items: center; }
+.frame .shot img { width: 100%; height: 100%; object-fit: cover; }
+.frame .shot .mono { color: rgb(255 255 255 / .35); }
+.frame figcaption { font-family: var(--font-mono); font-size: 11px; color: #E8A046; display: flex; justify-content: space-between; gap: 8px; }
+.frame figcaption span:last-child { color: rgb(237 230 218 / .7); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Music list */
+.music { list-style: none; margin: 0; padding: 0; display: grid; }
+.music li { border-bottom: 1px solid var(--hair); }
+.music .row { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto 26px; gap: 12px; align-items: baseline; padding: 15px 2px; color: var(--ink); text-decoration: none; }
+.music .n { font-family: var(--font-mono); font-size: 12px; }
+.music .t { font-family: var(--font-display); font-size: clamp(18px, 2vw, 22px); line-height: 1.25; }
+.music .t i { display: block; font-size: 15px; margin-top: 2px; }
+.music .m { font-family: var(--font-mono); font-size: 12px; text-align: right; line-height: 1.6; white-space: nowrap; } /* composer */
+.music .go { font-family: var(--font-mono); font-size: 13px; text-align: right; transition: transform 250ms var(--ease); }
+.music a.row:hover .t { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+.music a.row:hover .go { transform: translate(2px, -2px); }
+.music .soon { opacity: .55; }
+
+@media (max-width: 600px) {
+  .about-top { grid-template-columns: 1fr; }
+  .portrait { justify-self: center; }
+}
+
+dialog.drawer { margin: 0 0 0 auto; height: 100%; max-height: 100%; width: min(540px, 100%); border: 0; border-left: 1px solid var(--line); padding: 0;
+  background: var(--bg); color: var(--ink); }
+dialog.drawer::backdrop { background: rgb(26 24 22 / .35); }
+.drawer-inner { padding: max(24px, env(safe-area-inset-top, 0px)) max(28px, env(safe-area-inset-right, 0px)) 32px 28px; display: grid; gap: 22px; }
+.drawer-top { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line); padding-bottom: 14px; }
+.drawer h2 { font-size: 40px; letter-spacing: -.04em; line-height: 1; }
+.close { border: 1px solid var(--ink); background: none; border-radius: 50%; width: 34px; height: 34px; cursor: pointer; flex: none; }
+.close:hover { background: var(--ink); color: var(--bg); }
+.d-hero { aspect-ratio: 4 / 3; background: var(--c, var(--me)); display: grid; place-items: center; }
+/* Project covers: a solid colour rectangle with an optional cut-out object laid on top */
+.drawer .d-hero { background: none; aspect-ratio: auto; padding-block: 18px; overflow: visible; }
+.drawer .d-hero .cutout { width: 82%; }
+.cutout { display: block; width: 78%; max-width: 100%; height: auto; transform: rotate(var(--tilt, -8deg));
+  transition: transform 400ms var(--ease); } /* no drop shadow */
+.card .sheet .cutout { width: 84%; }
+.card:hover .cutout, .card:focus-visible .cutout { transform: rotate(var(--tilt, -8deg)) scale(1.04); }
+.meta { display: grid; grid-template-columns: 90px 1fr; margin: 0; font-size: 14px; }
+.meta dt, .meta dd { border-bottom: 1px solid var(--hair); padding-block: 9px; margin: 0; }
+.meta dt { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+/* every divider inside a project panel uses the same light rule */
+.drawer-inner { --line: var(--hair); }
+/* Skills: links in the meta row, each opening onto its block of description */
+#d-skills { display: flex; flex-wrap: wrap; gap: 6px 14px; }
+.skill-link { font: inherit; font-size: 14px; color: var(--ink); background: none; border: 0; padding: 0; cursor: pointer;
+  text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+.skill-link:hover { text-decoration-thickness: 2px; }
+.d-skillblocks { display: grid; }
+.skillgroup { display: grid; gap: 10px; padding-block: 16px; border-bottom: 1px solid var(--hair); }
+.skillgroup h3 { font-family: var(--font-mono); font-weight: 500; font-size: 13px; margin: 0 0 2px; }
+.skillblock { margin: 0; font-size: 15px; line-height: 1.55; max-width: 60ch; padding: 2px 6px; margin-inline: -6px; border-radius: 4px; scroll-margin: 24px; }
+.skillblock.flash { animation: skillflash 1600ms ease; }
+@keyframes skillflash { 0%, 30% { background-color: rgb(255 241 234 / .9); } 100% { background-color: transparent; } }
+
+/* Files section in each project panel */
+.d-files { display: grid; gap: 8px; border-bottom: 1px solid var(--line); padding-bottom: 20px; } /* divider sits below the folder */
+.d-files[hidden] { display: none; } /* projects without files: no files section at all */
+.d-files-title { margin: 0; color: var(--ink); }
+.d-files-list { list-style: none; margin: 0; padding: 0; display: grid; }
+.d-files-list li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 16px; align-items: center; padding-block: 10px; border-bottom: 1px solid var(--hair); }
+.f-name { font-size: 15px; min-width: 0; }
+.f-meta { grid-column: 1; font-size: 11px; }
+.f-actions { grid-column: 2; grid-row: 1 / span 2; display: flex; gap: 8px; }
+.f-btn { font-family: var(--font-mono); font-size: 12px; line-height: 1; color: var(--ink); background: none; border: 1px solid var(--ink); border-radius: 6px;
+  display: inline-flex; align-items: center; justify-content: center; text-align: center; min-width: 92px; height: 32px; padding: 0 14px; cursor: pointer; text-decoration: none; }
+.f-btn:hover { background: var(--ink); color: var(--bg); }
+.f-btn:disabled { opacity: .6; cursor: default; }
+.f-empty { color: var(--muted); margin: 0; }
+/* Super 8 film strip video player (a file with kind: "VIDEO") */
+.folder-body.is-video { grid-template-columns: 1fr; }
+.film { margin: 0; position: relative; background: #171513; padding: 14px 28px 10px; border-radius: 2px; }
+.film::before, .film::after { content: ""; position: absolute; top: 10px; bottom: 30px; width: 10px; opacity: .85;
+  background: repeating-linear-gradient(180deg, #EDE6DA 0 9px, transparent 9px 20px); }
+.film::before { left: 9px; } .film::after { right: 9px; }
+.film-frame { position: relative; border-radius: 6px; overflow: hidden; background: #0B0B0D; aspect-ratio: 4 / 3; }
+.film-frame video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.film-grain { display: none; position: absolute; inset: 0; pointer-events: none; opacity: 0; mix-blend-mode: multiply;
+  background: repeating-linear-gradient(0deg, #000 0 1px, transparent 1px 3px); transition: opacity 400ms; }
+.film-grain.on { animation: filmflick 1.1s steps(3) infinite; }
+@keyframes filmflick { 0%, 100% { opacity: .12; } 50% { opacity: .2; } }
+.film figcaption { font-family: var(--font-mono); font-size: 11px; color: #E8A046; display: flex; justify-content: space-between; gap: 10px; margin-top: 8px; }
+.film figcaption span:last-child { color: rgb(237 230 218 / .8); text-align: right; }
+@media (prefers-reduced-motion: reduce) { .film-grain.on { animation: none; opacity: .14; } }
+
+/* Manila folders */
+.folders { --manila: #E9C98F; --manila-2: #F3DFB5; }
+.folder-tabs { display: flex; gap: 4px; align-items: flex-end; overflow-x: auto; }
+.folder-tab { font-family: var(--font-mono); font-size: 12px; color: var(--ink); background: var(--manila-2); border: 0; border-radius: 7px 7px 0 0;
+  padding: 6px 14px 5px; cursor: pointer; white-space: nowrap; }
+.folder-tab[aria-selected="true"] { background: var(--manila); padding-block: 8px 6px; }
+.folder-tab:hover { filter: brightness(.97); }
+.folder-body { background: var(--manila); border-radius: 0 6px 6px 6px; padding: 14px; display: grid; grid-template-columns: 104px minmax(0, 1fr); gap: 16px; align-items: center;
+  box-shadow: 0 1px 2px rgb(3 25 39 / .12); }
+.folder-cover { display: block; background: #FBF8F3; border-radius: 2px; box-shadow: 0 2px 5px rgb(3 25 39 / .22); transform: rotate(-1.5deg); transition: transform 250ms var(--ease); }
+.folder-cover:hover { transform: rotate(0) translateY(-2px); }
+.folder-cover img { display: block; width: 100%; height: auto; border-radius: 2px; }
+.folder-info { display: grid; gap: 4px; min-width: 0; }
+.folder-info .f-name { font-size: 17px; line-height: 1.25; }
+/* buttons stacked on the right; the title wraps in its own column with a clear buffer before them */
+.folder-info { grid-template-columns: minmax(0, 1fr) auto; column-gap: 20px; align-items: center; }
+.folder-info .f-name, .folder-info .f-meta { grid-column: 1; overflow-wrap: break-word; }
+.folder-info .f-actions { grid-column: 2; grid-row: 1 / span 2; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+.placeholder { font-size: 15px; line-height: 1.6; color: var(--muted); max-width: 60ch; }
+.meta[hidden] { display: none; }
+/* swatch book */
+.d-book { display: grid; gap: 12px; padding-top: 6px; }
+.d-book[hidden] { display: none; }
+.d-book-pg { background: none; border: 0; padding: 0; cursor: pointer; display: block; width: 100%; }
+.d-book-pg img { display: block; width: 100%; max-height: 62vh; object-fit: contain; border-radius: 4px;
+  transition: opacity 180ms ease, transform 180ms ease; }
+.d-book-pg img.turning { opacity: 0; transform: translateX(-10px); }
+.d-book-ctl { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.d-book-ctl .f-btn { min-width: 40px; }
+.d-book-cap { color: var(--ink); text-align: center; }
+
+footer { max-width: 1200px; margin: 0 auto; padding-block: 24px 64px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 12px 32px;
+  font-family: var(--font-display); font-size: 18px; }
+/* Contact dropdown: unfolds from the center of the tab, then its rules draw outward and items fade in */
+.nav-drop { position: relative; }
+.drop { position: absolute; top: 100%; left: 50%; transform: translateX(-50%); padding-top: 12px;
+  visibility: hidden; pointer-events: none; transition: visibility 0s linear 320ms; }
+.nav-drop:hover .drop, .nav-drop:focus-within .drop, .nav-drop.open .drop { visibility: visible; pointer-events: auto; transition-delay: 0s; }
+.drop-inner { position: relative; background: var(--bg); border: 1px solid var(--line); display: grid; width: 160px;
+  clip-path: inset(0 50% 100% 50%); opacity: 0;
+  transition: clip-path 320ms cubic-bezier(.65,0,.35,1), opacity 220ms ease; }
+.nav-drop:hover .drop-inner, .nav-drop:focus-within .drop-inner, .nav-drop.open .drop-inner {
+  clip-path: inset(0 0 0 0); opacity: 1; transition: clip-path 460ms cubic-bezier(.65,0,.35,1), opacity 260ms ease; }
+.drop a, .drop button { position: relative; box-sizing: border-box; display: flex; align-items: center; justify-content: center; height: 46px; padding: 0 18px; margin: 0;
+  font-family: var(--font-display); font-size: 18px; font-weight: 400; line-height: 1; color: var(--ink); text-decoration: none; white-space: nowrap; text-align: center;
+  background: none; border: 0; cursor: pointer; width: 100%; -webkit-appearance: none; appearance: none;
+  opacity: 0; transform: translateY(-4px); transition: opacity 200ms ease, transform 200ms ease; }
+.nav-drop:hover .drop-inner > *, .nav-drop:focus-within .drop-inner > *, .nav-drop.open .drop-inner > * {
+  opacity: 1; transform: none; transition: opacity 320ms ease 260ms, transform 320ms var(--ease) 260ms; }
+.nav-drop:hover .drop-inner > * + *, .nav-drop:focus-within .drop-inner > * + *, .nav-drop.open .drop-inner > * + * { transition-delay: 340ms; }
+/* the divider between items draws from the center outward */
+.drop-inner > * + *::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1px; background: var(--line);
+  transform: scaleX(0); transition: transform 200ms ease; }
+.nav-drop:hover .drop-inner > * + *::before, .nav-drop:focus-within .drop-inner > * + *::before, .nav-drop.open .drop-inner > * + *::before {
+  transform: scaleX(1); transition: transform 420ms cubic-bezier(.65,0,.35,1) 200ms; }
+.drop a:hover, .drop a:focus-visible, .drop button:hover, .drop button:focus-visible { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+/* Bottom bar: name left, contact links stacked right; slides up with the top bar */
+.bottombar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; background: var(--bg); border-top: 1px solid var(--line);
+  padding-bottom: env(safe-area-inset-bottom, 0px); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  transform: translateY(110%); transition: transform 1100ms cubic-bezier(.65,0,.35,1); }
+.bottombar.show { transform: none; }
+.bottombar-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-block: 10px; }
+.bb-name { font-family: var(--font-display); font-size: 18px; color: var(--ink); }
+.bb-links { display: grid; justify-items: end; gap: 2px; }
+.bb-links a, .bb-links button { font-family: var(--font-display); font-size: 16px; line-height: 1.3; color: var(--ink); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: none; }
+.bb-links a:hover, .bb-links button:hover, .bb-links a:focus-visible, .bb-links button:focus-visible { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+body.bars-on { padding-bottom: var(--bbh, calc(72px + env(safe-area-inset-bottom, 0px))); } /* exactly the bottom bar's height, so the gap above its line matches the 40px above the portrait */
+
+/* Toast */
+.toast { position: fixed; left: 50%; top: 50%; z-index: 30;
+  transform: translate(-50%, calc(-50% + 12px)); opacity: 0; pointer-events: none; transition: opacity 250ms ease, transform 250ms var(--ease);
+  background: #FFF1EA; color: var(--ink); font-family: var(--font-display); font-size: 16px; padding: 10px 20px; white-space: nowrap; border-radius: 12px;
+  box-shadow: 0 8px 24px rgb(3 25 39 / .14), 0 1px 3px rgb(3 25 39 / .10); }
+.toast.show { opacity: 1; transform: translate(-50%, -50%); }
+
+/* Top nav */
+.topnav { position: fixed; top: 0; left: 0; right: 0; z-index: 20; background: var(--bg); border-bottom: 1px solid var(--line);
+  padding-top: env(safe-area-inset-top, 0px); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  transform: translateY(-110%); transition: transform 1100ms cubic-bezier(.65,0,.35,1); }
+.topnav.show { transform: none; }
+.topnav-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: center; gap: clamp(24px, 5vw, 48px); padding-block: 14px; }
+.topnav button { background: none; border: 0; cursor: pointer; padding: 2px 0; font-family: var(--font-display); font-size: 18px; color: var(--ink); }
+.topnav button:hover, .topnav button[aria-current="true"] { text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 1px; }
+#projects, #contact { scroll-margin-top: 72px; }
+
+@media (max-width: 560px) {
+  .bar .hide-sm { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 1ms !important; transition-delay: 0ms !important; }
+}
+</style>
+</head>
+<body>
+
+
+<!-- ===== Intro stage ===== -->
+<!-- ===== Top nav (appears once you reach the projects) ===== -->
+<nav class="topnav" id="topnav" aria-label="Site">
+  <div class="topnav-inner">
+    <button type="button" data-go="stage">Home</button>
+    <button type="button" data-go="projects">Projects</button>
+    <button type="button" data-go="about">About</button>
+  </div>
+</nav>
+
+<!-- ===== Bottom bar (appears with the top bar) ===== -->
+<div class="bottombar" id="bottombar" aria-label="Contact">
+  <div class="bottombar-inner">
+    <span class="bb-name">Annie So</span>
+    <div class="bb-links">
+      <button type="button" id="copy-email" title="Copy email address">Email</button>
+      <a href="https://www.linkedin.com/in/anniehbso/" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </div>
+</div>
+
+<section class="stage" id="stage" aria-label="Introduction">
+
+  <div class="step" data-name="Hello">
+    <h1 class="hello">
+      <span class="row name-full">Hi, I’m Annie</span>
+      <span class="row name-short">Annie So</span>
+    </h1>
+  </div>
+
+  <div class="step" data-name="Studying">
+    <div class="study">
+      <p class="big">Mechanical Engineering &amp; Design</p>
+      <p class="small">Student at <span class="serif">Stanford</span></p>
+    </div>
+  </div>
+
+  <div class="step" data-name="Passions">
+    <div class="passion">
+      <p class="passion-lead">I’ve always been drawn to</p>
+      <ul class="polaroids">
+        <li class="pol pol-mini" style="--r:-6deg;--ct:82%;--cb:1%"><img class="pol-img" src="img/pol-meche.jpg" alt="Mechanical Engineering: Annie as a kid, building a Lego figure"></li>
+        <li class="pol pol-square" style="--r:3deg;--ct:77%;--cb:1%"><img class="pol-img" src="img/pol-wearables.jpg" alt="Wearables: Annie as a kid, laying out dolls in their dresses"></li>
+        <li class="pol pol-wide" style="--r:4deg;--ct:82%;--cb:1%"><img class="pol-img" src="img/pol-cx.jpg" alt="Customer Experience: Annie as a kid in a hanbok, carefully carrying a mug"></li>
+      </ul>
+      <p class="passion-tail">and where they meet, <strong>human-centered design</strong></p>
+    </div>
+  </div>
+
+  <div class="step step-venn" data-name="Where they meet">
+    <div class="venn-wrap">
+      <svg class="venn" id="venn" viewBox="0 0 600 590" role="img" aria-label="Venn diagram of Annie's projects across wearables, mechanical engineering and CX">
+        <defs id="venn-defs"></defs>
+        <g id="fills"></g>
+        <g id="regions"></g>
+        <circle class="ring" cx="300" cy="210" r="150"/>
+        <circle class="ring r2" cx="210" cy="365" r="150"/>
+        <circle class="ring r3" cx="390" cy="365" r="150"/>
+        <g class="fade">
+          <text class="set-label" x="300" y="31" text-anchor="middle">WEARABLES</text>
+          <text class="set-label" x="165" y="549" text-anchor="middle"><tspan x="165">MECHANICAL</tspan><tspan x="165" dy="20">ENGINEERING</tspan></text>
+          <text class="set-label" x="435" y="559" text-anchor="middle">CX</text>
+        </g>
+        <g class="fade late" id="venn-items"></g>
+      </svg>
+      <div class="cap-slot" id="cap-slot">
+        <p class="venn-caption mono" id="venn-caption"></p>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ===== Index ===== -->
+<section class="section" id="projects" aria-label="Projects">
+  <div class="proj-wrap" id="proj-wrap"><div class="proj-in">
+    <div class="proj-head">
+      <div class="vtabs" role="group" aria-label="Browse projects">
+        <button type="button" class="vtab" data-v="project" aria-pressed="true">By field<small>browse project cards</small></button>
+        <button type="button" class="vtab" data-v="skill" aria-pressed="false">By skill<small>read what I did, skill by skill</small></button>
+      </div>
+      <div class="chips" id="chips" role="group" aria-label="Show projects by field"></div>
+      <div class="skill-nav" id="skill-nav" hidden>
+        <div class="fam-row" id="fam-row" role="group" aria-label="Skill families"></div>
+        <div class="sk-row" id="sk-row" role="group" aria-label="Skills"></div>
+      </div>
+    </div>
+    <p class="filter-note mono" id="filter-note" hidden></p>
+    <div class="grid" id="grid"></div>
+    <div class="skill-results" id="skill-results" hidden></div>
+  </div></div>
+</section>
+
+<!-- ===== About ===== -->
+<section class="section about" id="about" aria-label="About">
+  <div class="about-top">
+    <div class="about-bio">
+      <p class="bio">I was born in Seoul and raised in Los Angeles &amp; am bilingual in Korean and English (working on a third: French!)</p>
+      <p class="bio">In my free time, I like to play the <button type="button" class="hob" data-hob="cello" aria-expanded="false" aria-controls="hob-cello">cello</button> and <button type="button" class="hob" data-hob="draw" aria-expanded="false" aria-controls="hob-draw">draw</button>.</p>
+      <p class="currently">Also currently working on <button type="button" class="hob" id="wip-btn" aria-haspopup="dialog">this</button> :)</p>
+    </div>
+    <figure class="portrait">
+      <img class="portrait-img" src="img/portrait.jpg?v=2" alt="Annie So">
+    </figure>
+  </div>
+
+  <!-- Hobby drop-downs: open from the links in the bio -->
+  <div class="hob-panels">
+    <div class="hob-panel" id="hob-cello" data-hob="cello"><div class="hob-inner">
+      <div class="hob-head"><span class="mono">cello</span><span class="hob-head-r"><a class="hob-link mono" href="files/music-resume.pdf" target="_blank" rel="noopener">music résumé ↗</a><button type="button" class="hob-close" aria-label="Close cello">✕</button></span></div>
+      <p class="cello-hl">Carnegie Hall soloist, principal cellist of the California Honor Symphonic Orchestra, three-time All-State, and a Tanglewood Institute alum.</p>
+      <ul class="music" id="cello-list"></ul>
+    </div></div>
+    <div class="hob-panel" id="hob-draw" data-hob="draw"><div class="hob-inner">
+      <div class="hob-head"><span class="mono">drawings</span><button type="button" class="hob-close" aria-label="Close drawings">✕</button></div>
+      <div class="dtabs" role="tablist" id="draw-tabs" aria-label="Drawing categories"></div>
+      <div class="dfolder" id="draw-folder" role="tabpanel"></div>
+    </div></div>
+  </div>
+</section>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- ===== "Currently working on" pop-up ===== -->
+<dialog class="wip" id="wip" aria-label="Currently working on">
+  <figure class="wip-card">
+    <div class="wip-photo" id="wip-photo"><span class="mono">photo</span></div>
+    <figcaption id="wip-caption"></figcaption>
+  </figure>
+</dialog>
+
+<!-- ===== Drawer ===== -->
+<dialog class="drawer" id="drawer" aria-labelledby="d-title">
+  <div class="drawer-inner">
+    <div class="drawer-top">
+      <p class="mono" id="d-region" style="color:var(--ink)"></p>
+      <button class="close" id="d-close" type="button" aria-label="Close">✕</button>
+    </div>
+    <h2 id="d-title"></h2>
+    <div class="d-hero" id="d-hero"></div>
+    <dl class="meta">
+      <dt>role</dt><dd id="d-role">—</dd>
+      <dt>year</dt><dd id="d-year">—</dd>
+      <dt>skills</dt><dd id="d-skills">—</dd>
+    </dl>
+    <div class="d-files">
+      <p class="d-files-title mono">files</p>
+      <div class="folders" id="d-files"></div>
+    </div>
+    <p class="placeholder" id="d-body"></p>
+    <div class="d-book" id="d-book" hidden>
+      <button type="button" class="d-book-pg" id="d-book-pg" aria-label="Next swatch"><img id="d-book-img" alt=""></button>
+      <div class="d-book-ctl">
+        <button type="button" class="f-btn" data-b="-1" aria-label="Previous swatch">←</button>
+        <span class="d-book-cap mono" id="d-book-cap"></span>
+        <button type="button" class="f-btn" data-b="1" aria-label="Next swatch">→</button>
+      </div>
+    </div>
+    <div class="d-skillblocks" id="d-skillblocks"></div>
+  </div>
+</dialog>
+
+<script>
+/* =========================================================
+   CONTENT: edit this list to add or change projects.
+   sets: any combination of "wear", "me", "ux".
+   img: optional image URL shown in the card's cutout window.
+   files: folder tabs. A video is { tab: "video", name, path: "files/clip.mp4", cover: "img/poster.jpg", kind: "VIDEO" }
+          and plays inside a Super 8 film strip.
+   ========================================================= */
+const SETS = {
+  me:   { label: "Mechanical Engineering", num: "01", color: "var(--me)" },
+  wear: { label: "Wearables",  num: "02", color: "var(--wear)" },
+  ux:   { label: "CX",                     num: "03", color: "var(--ux)" },
+};
+const PROJECTS = [
+  /* Names inside the Venn are placed automatically: clustered around the middle of their section, kept off the edges. */
+  { id: "textile",  title: "Textile Development",       sets: ["wear"], color: "#3A1A14",
+    noMeta: true,
+    book: [ /* swatch book: click the page or the arrows to flip */
+      { src: "img/swatches/swatch-1.png", title: "Single-Weave Sample" },
+      { src: "img/swatches/swatch-2.png", title: "Double-Weave Sample" },
+      { src: "img/swatches/swatch-3.png", title: "Jersey Knit Sample" },
+      { src: "img/swatches/swatch-4.png", title: "Biomaterials" },
+    ],
+    body: "I've explored textile development through a variety of techniques, from hand-knitting to working with industrial looms and weaving machines. Experimenting with different fibers, weaving patterns, and biomaterials has helped me understand how textile structure and material properties influence flexibility, strength, and functionality. I especially enjoy exploring how traditional textile-making techniques can be combined with new materials to create functional, wearable designs.",
+    cutout: "img/cut-textile.png", tilt: 0, cutoutW: "92%", cutoutWPanel: "70%", cutoutPos: "top-left" }, /* hand enters from the card's top-left corner */
+  { id: "weaving",  title: "Sewing", sets: ["wear"], color: "#6B1E24", panelTitle: "Sewing & Garment Construction",
+    noMeta: true, body: "Through hand-stitching, machine sewing, tailoring, and garment creation, I've developed a hands-on understanding of how fabrics can be shaped into functional, wearable products. I've gained experience with pattern drafting, pinning, fitting, and adjusting garments, learning how small changes in construction can make a big difference in fit, comfort, and movement. Sewing has also taught me to think about design in three dimensions, translating flat patterns into finished pieces that work with the human body.",
+    cutout: "img/cut-sewing.png?v=2", tilt: 0, cutoutFit: "cover", cutoutWPanel: "70%" }, /* cropped to 4:5, flush on all four sides */
+  { id: "speac",    title: "SPEAC",                     sets: ["wear","me"], first: true,
+    year: "2024",
+    skills: [
+      ["Human-Centered Design", "SPEAC was developed around the goal of making communication more accessible for nonverbal individuals. Throughout the design process, we prioritized intuitive interactions, comfort, and wearability to create a device that could integrate naturally into everyday life."],
+      ["Wearable Technology & Soft Electronics", "I worked on integrating conductive textiles and capacitive touch sensors into a wearable sleeve, translating physical interactions into audio outputs. This required balancing the electrical functionality of the device with the flexibility and comfort of a textile-based system."],
+      ["Prototyping", "Through iterative prototyping, I explored different materials, sensor configurations, and construction methods to develop a functional wearable device. Each iteration helped address practical challenges in sensor responsiveness, physical construction, and overall usability."],
+      ["Systems Integration", "Developing SPEAC required bringing together textile fabrication, sensing circuitry, and audio feedback into one cohesive system. I gained experience navigating the dependencies between hardware components and ensuring that individual subsystems worked together reliably."],
+    ],
+    cutout: "img/cut-speac.png", tilt: 0, cutoutFit: "height", cutoutWPanel: "34%", /* arm runs top-to-bottom, flush with the card */
+    files: [
+      { tab: "build guide", name: "SPEAC Build Guide & Bill of Materials", path: "files/speac-build-guide.pdf", cover: "img/cover-speac-build-guide.jpg", kind: "PDF", pages: 8, size: "13.2 MB" },
+      { tab: "diagrams", name: "SPEAC Technical Diagrams", path: "files/speac-diagrams.pdf", cover: "img/cover-speac-diagrams.jpg", kind: "PDF", pages: 8, size: "2.1 MB" },
+    ] },
+  { id: "feig",     title: "Feig Lab",                  sets: ["wear","me"], first: true,
+    role: "Research Assistant", year: "2026",
+    skills: [
+      ["Materials Research & Development", "During my summer research at Stanford's Feig Lab, I worked on developing hydrogel-based textiles for passive body cooling where I developed and refined hydrogel formulations to improve their moisture absorption, flexibility, and swelling behavior. I explored different polymer compositions, crosslinkers, and additives to understand how each component affected the material's properties and suitability for wearable cooling applications."],
+      ["Experimental Design", "I designed and conducted experiments to compare hydrogel formulations and evaluate their performance under different conditions. Much of this process involved identifying variables, developing testing procedures, analyzing results, and using what I learned to guide the next round of experiments."],
+      ["Finite Element Analysis", "One of the biggest challenges was controlling how the hydrogels expanded as they absorbed moisture. The goal was to have the gels expand vertically while limiting lateral expansion, so I investigated different surface contact types and pressures applied in Finite Element Analysis to see how we could construct the gels to absorb sweat without distorting the fabric or compromising the garment's fit."],
+      ["Systems Integration", "Another challenge was figuring out how to keep the hydrogels securely attached to fabric, even after repeated swelling, drying, and washing. I explored different integration and adhesion methods, considering both the durability of the gel–textile interface and the flexibility needed for a wearable garment."],
+      ["Wearable Technology & Prototyping", "I also worked on designing hydrogel patterns based on where the body produces the most sweat and where cooling would be most beneficial. The idea was to create pathways that could transport sweat from high-sweat-production areas toward major muscle groups, making the cooling system more targeted and efficient. To bring the research together, I designed patterns and sewed a full-scale garment prototype that incorporated the proposed hydrogel cooling system. This gave me the opportunity to connect the materials research with practical considerations like garment construction, body movement, and the placement of functional materials."],
+    ],
+    cutout: "img/cut-feig-lab.png", tilt: 0, cutoutW: "72%", cutoutWPanel: "48%", cutoutAlign: "right", cutoutPanel: "img/cut-feig-lab-shirt.png", /* card: right edge flush, vertically centered; panel: shirt render */
+    files: [
+      { tab: "research poster", name: "Hydrogel-Textile for Optimal Sweat Management", path: "files/feig-lab-research-poster.pdf", cover: "img/cover-feig-lab-research-poster.jpg", kind: "PDF", pages: 1, size: "11.5 MB" },
+    ] },
+  { id: "boot",     title: "Boot Buddy",                sets: ["wear","ux"], color: "#E2B24A", year: "2025",
+    skills: [
+      ["User Needfinding", "Boot Buddy started from exploring a common frustration: the discomfort and blisters that come with breaking in new boots. Through needfinding, I focused on understanding where users experience the most discomfort and identifying the underlying need for a simple, accessible solution that could work across different types of footwear."],
+      ["Concept Development", "Rather than modifying individual boots, I wanted to develop a universal solution that users could wear with any pair. This led to Boot Buddy, a sock with strategically placed extra padding in areas prone to friction and pressure, designed to make breaking in new boots more comfortable without requiring users to change their footwear."],
+      ["Design Communication", "To bring the concept to life, I created a poster and advertisement video that captured the user's frustration, demonstrated Boot Buddy's intended use case, and highlighted how the product addressed the original need. This taught me how to communicate a design beyond its technical features, using visual storytelling to help an audience understand both the problem and the value of the proposed solution."],
+    ],
+    cutout: "img/cut-boot-buddy.png", tilt: 0, cutoutW: "94%", cutoutWPanel: "80%", cutoutPos: "top-left", /* leg enters from the card's top-left corner */
+    files: [
+      { tab: "video", name: "Introducing Boot Buddy", path: "files/boot-buddy-intro.mp4", cover: "img/poster-boot-buddy-intro.jpg", kind: "VIDEO", aspect: "16 / 9", frame: "1A" },
+      { tab: "poster", name: "Boot Buddy Poster", path: "files/boot-buddy-poster.jpg", cover: "img/cover-boot-buddy-poster.jpg", kind: "JPG", size: "217 KB" },
+      { tab: "workbook", name: "Boot Buddy Design Workbook", path: "files/boot-buddy-workbook.pdf", cover: "img/cover-boot-buddy-workbook.jpg", kind: "PDF", pages: 14, size: "5.0 MB" },
+    ] },
+  { id: "frc",      title: "FIRST Robotics",            sets: ["me"],
+    cutout: "img/cut-frc.png?v=2", tilt: 0, cutoutW: "56%", cutoutWPanel: "40%", cutoutAlignY: "bottom", /* photo's bottom edge sits on the card's bottom edge */
+    role: "Team President, Mechanism Lead, Drive Coach, Lead Strategist, Manufacturing Team",
+    year: "2021–2025",
+    skills: [
+      ["Mechanical Design", "Starting my robotics journey on the manufacturing team, I was able to work hands-on with the fabrication and assembly of robotic components, building an understanding of how designs translate into physical mechanisms before eventually taking on the responsibility of overseeing the design and integration of our 2023 robot's indexer as mechanism lead. Working through the challenges of fitting a functional mechanism into a larger, interconnected system taught me to think beyond individual components and consider how each design decision affects the performance and reliability of the robot as a whole."],
+      ["Prototyping", "Prototyping became one of my favorite parts of the engineering process, whether it meant putting together rough conceptual models with plywood and clamps or fine-tuning tiny variations in a single component. I learned that prototypes don't always need to be polished to be useful, and that even the smallest design changes can make a significant difference in performance."],
+      ["Fabrication", "I gained hands-on experience machining and working with a wide range of materials, including wood, aluminum, steel, and polycarbonate. Spending time in the workshop taught me to appreciate the practical side of engineering, especially how material properties, manufacturing limitations, and assembly considerations influence the way something should be designed in the first place."],
+      ["Project Management", "With only six weeks to design, build, and test an entire robot, keeping everyone on track was a challenge of its own. I developed Gantt charts to organize project timelines, coordinate milestones across technical subteams, and manage dependencies so that different parts of the robot could come together on schedule."],
+      ["Leadership", "As Team President for two years, I led a multidisciplinary team of over 80 students, learning that effective leadership starts with establishing a clear, organization-wide goal. By working from that shared vision down to individual subteam priorities and responsibilities, I learned how to keep people aligned while giving them the ownership and flexibility to contribute their own ideas."],
+      ["Strategic Decision-Making", "Leading a team taught me to look beyond immediate challenges and think about what would set us up for success in the long run. From balancing technical priorities and limited resources to securing and managing corporate sponsorships with Boeing, RTX, Chevron, Robinson Helicopter, John Deere, and others, I learned to make decisions with the team's broader goals, sustainability, and future opportunities in mind."],
+      ["Technical Communication", "I oversaw the publication of two technical engineering binders documenting our robot designs, development processes, and engineering decisions. I also served as a team spokesperson across national media, conferences, district board meetings, and community events, learning how to communicate complex technical initiatives to audiences with very different backgrounds and interests."],
+      ["Community Outreach", "One of the most rewarding parts of FRC was finding ways to extend our team's impact beyond competition. I helped develop CatzCare, a program that provides rookie and international teams with toolkits and workspace access, supporting seven teams around the world during the 2025 season. I also mentored an FLL team that advanced to the state championships, co-hosted an inaugural three-day competition attended by over 30 teams, and helped organize a donation drive that collected more than 5,000 items for the Salvation Army's LA wildfire relief efforts. These experiences showed me how engineering communities can make a difference far beyond the robots we build."],
+    ],
+    /* description groups: [heading, skill names in order] */
+    groups: [
+      ["Technical Skills", ["Mechanical Design", "Prototyping", "Fabrication"]],
+      ["Project Management & Leadership", ["Project Management", "Leadership", "Strategic Decision-Making"]],
+      ["Communication & Impact", ["Technical Communication", "Community Outreach"]],
+    ],
+    files: [
+      { tab: "2024 binder", name: "2024 Crescendo Technical Binder", path: "files/2024-technical-binder.pdf", cover: "img/cover-2024-technical-binder.jpg", kind: "PDF", pages: 17, size: "13.2 MB" },
+      { tab: "2025 binder", name: "2025 Reefscape Technical Binder", path: "files/2025-technical-binder.pdf", cover: "img/cover-2025-technical-binder.jpg", kind: "PDF", pages: 29, size: "9.1 MB" },
+      { tab: "Gantt chart", name: "2024–2025 Robot Gantt Chart", path: "files/2024-2025-robot-gantt-chart.pdf", cover: "img/cover-2024-2025-robot-gantt-chart.jpg", kind: "PDF", pages: 9, size: "513 KB" },
+    ] },
+  { id: "automata", title: "Automata",                  sets: ["me"], color: "#FAF0E2",
+    year: "2025",
+    skills: [
+      ["Mechanical Design", "My team designed and built a hand-cranked automaton that brought an original animated scene from the movie “How to Train Your Dragon” to life using purely mechanical motion. One of my biggest contributions was developing a modified slider-crank mechanism that allowed a slider to move perpendicular to its conventional orientation, challenging me to think beyond standard mechanism configurations while working within the constraints of a single rotating crank."],
+      ["Prototyping", "Before building the final automaton, we constructed a smaller-scale working prototype with just one mechanism and then a full mock-up of all mechanisms to test our mechanisms and identify potential issues. This gave us the opportunity to experiment with different geometries, refine the alignment of moving components, and improve the consistency of the motion before committing to the final design."],
+      ["Fabrication", "Working with a limited selection of materials, including cardboard, foam core, paper, and wooden dowels, taught me how much precision matters in mechanical systems. From carefully cutting and assembling components to ensuring that rotating shafts and sliding parts moved smoothly, I learned how even small manufacturing inaccuracies could affect the reliability of an entire mechanism."],
+      ["Systems Integration", "Bringing the automaton together required coordinating multiple mechanical movements through a single hand-operated crank while keeping the mechanisms visible and separate from the animated scene. I learned to think about how individual components interacted as part of a larger system, balancing mechanical complexity with smooth, repeatable operation."],
+    ],
+    cutout: "img/cut-automata.png?v=2", tilt: 0, cutoutW: "88%", cutoutWPanel: "74%", cutoutAlign: "right", /* yellow dragon touches the card's right edge */
+    files: [
+      { tab: "proof-of-concept", name: "Automata Proof-of-Concept", path: "files/automata-proof-of-concept.mp4", cover: "img/poster-automata-proof-of-concept.jpg", kind: "VIDEO", aspect: "9 / 16", maxW: "280px", frame: "1A" },
+      { tab: "prototype", name: "Mechanism Prototype", path: "files/automata-mechanism-prototype.mp4", cover: "img/poster-automata-mechanism-prototype.jpg", kind: "VIDEO", aspect: "720 / 950", maxW: "360px", frame: "2A" },
+      { tab: "mock-up", name: "Full Mock-Up", path: "files/automata-full-mockup.mp4", cover: "img/poster-automata-full-mockup.jpg", kind: "VIDEO", aspect: "720 / 504", frame: "3A" },
+      { tab: "workbook", name: "Automata Workbook", path: "files/automata-workbook.pdf", cover: "img/cover-automata-workbook.jpg", kind: "PDF", pages: 11, size: "3.8 MB" },
+    ] },
+  { id: "me80",     title: "Optimal Straw",             vennTitle: "Optimal\nStraw", sets: ["me","ux"], dot: "var(--me)", color: "#D97B3A",
+    year: "2026", body: "More coming soon!",
+    cutout: "img/cut-optimal-straw.png", tilt: 0, cutoutW: "92%", cutoutWPanel: "66%", cutoutPos: "bottom-left" }, /* hand enters from the card's bottom-left corner */
+  { id: "table",    title: "Portable Changing Table",   vennTitle: "Table", sets: ["me","ux"], dot: "var(--me)", color: "#7D7A45",
+    year: "2024",
+    skills: [
+      ["Human-Centered Design", "Most public restrooms lack accessible changing spaces for adults with disabilities who require assistance with personal care, often leaving individuals and caregivers without a safe, sanitary, or dignified option. To address this issue, I designed a portable, foldable changing table with a focus on accessibility and ease of use. I met with special education faculty and students to better understand their everyday challenges and identify the needs my design should address. These conversations helped me recognize the importance of involving users throughout the design process and considering how even small mechanical design decisions could make a meaningful difference."],
+      ["Mechanical Design & Finite Element Analysis", "One of my biggest engineering challenges was creating a foldable structure capable of supporting approximately 200 pounds while remaining portable and easy to operate. I used Finite Element Analysis to evaluate stress distributions and identify potential structural weaknesses, helping me make informed decisions about the table's geometry and load-bearing components. This taught me how to balance structural integrity with practical constraints such as weight, compactness, and usability."],
+      ["Prototyping", "Throughout the design process, I explored different structural configurations and folding mechanisms to improve the table's functionality. I learned how to translate user feedback and engineering analysis into design improvements, navigating trade-offs between strength, portability, and ease of operation."],
+    ],
+    cutout: "img/cut-changing-table.png", tilt: 0, cutoutW: "46%", cutoutWPanel: "28%", /* three folding legs, centered */
+    files: [
+      { tab: "build guide", name: "Portable Changing Table Build Guide & Bill of Materials", path: "files/portable-changing-table.pdf", cover: "img/cover-portable-changing-table.jpg", kind: "PDF", pages: 4, size: "1.3 MB" },
+    ] },
+  { id: "oncall",   title: "On Call",                   sets: ["ux"],
+    role: "Jr. Captain of Community & Culture, Shift Lead (Barista)", year: "2025–Present",
+    skills: [
+      ["Community Outreach", "As Captain of Community & Culture at On Call Café, I lead the planning and coordination of events that bring together different parts of the Stanford community. I have collaborated with d.school professors, class presidents, Figma, SpaceX AI, and student filmmakers to organize speaker events, special collaborations, and screenings, turning creative ideas into experiences that connect people beyond the classroom."],
+      ["Leadership", "Just as importantly, a big part of my role is making sure On Call feels like more than just a place to work. From new-member rollouts (complete with lots of glitter and wacky costumes!) and quarterly special dinners to bonfires, our annual long-weekend retreat, and Big-Little Week, I organize opportunities for members to build friendships and feel at home within the team."],
+      ["Event Planning", "Behind each of these events is lots of coordination, from managing timelines and communicating plans to delegating responsibilities and bringing everyone's ideas together. Through this, I've learned how to balance the logistical side of leadership with the more personal side of building a community."],
+      ["Customer Service", "And of course, at the heart of On Call is the café itself. Working as a barista has taught me that hospitality is just as much about the people as it is about the drinks. Whether handling a busy shift, stepping in to help a teammate, or remembering the regulars like how Daniel always gets a full Kimcheese and a Friday Flower or that Carol likes her matcha with one pump rose and one pump lavender syrup, I try to make On Call a place where people feel genuinely welcomed and enjoy spending time."],
+    ], color: "#7D7A45",
+    cutout: "img/cut-on-call-wall.png", tilt: 0, cutoutFit: "cover", cutoutWPanel: "40%", cutoutPanel: "img/cut-on-call-sticker.png" }, /* card: sign + the wall it hangs on; panel: mascot sticker */
+  { id: "smg",      title: "Stanford Management",       vennTitle: "SMG", sets: ["ux"], color: "#FFFFFF",
+    role: "Consultant", year: "2026–Present", body: "More coming soon!",
+    cutout: "img/cut-smg.png", tilt: 0, cutoutW: "70%", cutoutWPanel: "46%" }, /* logo, white background removed */
+  { id: "d11",      title: "How To Ditch Your Phone",   vennTitle: "How To...", sets: ["ux"], color: "#8FA9C0",
+    year: "2025",
+    skills: [
+      ["Human-Centered Design", "My team and I designed an interactive website to help people spend less time on their phones by discovering alternative activities. Rather than simply discouraging screen time, we wanted to create a positive, engaging experience that encouraged users to explore other ways to spend their free time."],
+      ["UI/UX Design", "Using Figma, I explored how layout, visual hierarchy, and navigation could make the website intuitive and engaging while helping users discover activities with ease. I also helped develop a style guide establishing consistent typography, color palettes, and design elements across the website. Through this process, I learned how to balance aesthetics with functionality and create a cohesive user experience."],
+      ["Prototyping", "We brought our ideas to life through a clickable Figma prototype, connecting individual screens into a cohesive user experience. This helped me think beyond the appearance of each page and consider how users would navigate the website, discover alternatives, and move naturally between different features."],
+    ],
+    cutout: "img/cut-how-to.png", tilt: 0, cutoutW: "82%", cutoutWPanel: "62%", cutoutPanel: "img/cut-how-to-ink.png", /* cream lines on the card; dark ink in the panel */
+    files: [
+      { tab: "prototype", name: "How To... Figma Prototype", path: "https://www.figma.com/proto/kKgKbpQAeIoOdesWn7tEsA/Team-4?node-id=5200-3469&p=f&t=q4NSJ4ml81MjCXxP-1&scaling=scale-down&content-scaling=fixed&page-id=5200%3A2140&starting-point-node-id=5200%3A3469", cover: "img/cover-how-to-prototype.jpg", kind: "LINK" },
+      { tab: "workbook", name: "How To... Workbook", path: "files/how-to-workbook.pdf", cover: "img/cover-how-to-workbook.jpg", kind: "PDF", pages: 19, size: "7.1 MB" },
+      { tab: "style guide", name: "How To... Style Guide", path: "files/how-to-style-guide.jpg", cover: "img/cover-how-to-style-guide.jpg", kind: "JPG", size: "439 KB" },
+    ] },
+  { id: "tours",    title: "Tour Guide",                sets: ["ux"],
+    panelTitle: "Stanford Tour Guides", role: "Campus Tour Guide", year: "2026–Present",
+    skills: [
+      ["Hospitality", "As a tour guide, I am often one of the first people prospective students and their families interact with at Stanford, thus I always keep in mind that my interaction with a visitor might be the only impression of Stanford they ever get. It’s important for me to go the extra mile to be helpful, so whenever someone asks for a map, I always give them suggestions on places to visit across campus. If someone asks me a question about the university, I always supplement my answer with a personal experience that helps illustrate the point. I work to create a welcoming and engaging environment, helping visitors feel comfortable asking questions and making sure they left with a positive, genuine impression of the university."],
+      ["Cross-Cultural Communication", "Meeting visitors from all over the world has taught me how to communicate across language and cultural barriers. I've learned to adapt how I explain things, recognize different perspectives and expectations, and make sure that everyone feels comfortable, included, and understood, regardless of their background."],
+      ["Effective Communication & Active Listening", "One of the most important things I've learned is that the question someone asks isn't always the question they actually want answered. I try to understand the concern or curiosity behind each question and structure my responses around “what, so what, and now what”, explaining the information, why it matters, and what it means for the visitor."],
+      ["Adaptability", "No two tours are the same, and visitors often ask difficult or unexpected questions that don't have straightforward answers. I've learned to think on my feet, respond thoughtfully and honestly, and navigate sensitive topics while balancing my personal experiences with the responsibility of representing Stanford."],
+    ], color: "#6B1E24", cutout: "img/cut-tour-guides.png?v=3", tilt: 0, cutoutW: "86%", cutoutWPanel: "64%" }, /* photo is already angled */
+];
+const SHEETS = ["#6B1E24", "#7D7A45", "#FAF0E2", "#3A1A14", "#C9784F", "#8FA9C0"];
+const WINDOWS = ["circle", "rect", "arch", "pill"];
+
+const CIRCLES = { wear: [300,210,150], me: [210,365,150], ux: [390,365,150] };
+const REGION_POS = {
+  "wear": [300, 125], "me": [128, 410], "ux": [472, 410],
+  "me+wear": [226, 272], "ux+wear": [374, 272], "me+ux": [300, 456], "me+ux+wear": [300, 318],
+};
+const STEP_TIMES = [500, 1600, 7000];
+/* Venn palette: Portra blush. Oxblood, olive, cream; overlaps are even mixes; center is a deep brown as the focal point. */
+const REGION_FILL = {
+  "wear": "#6B1E24", "me": "#7D7A45", "ux": "#FAF0E2",
+  "me+wear": "#744C35", "ux+wear": "#B38783", "me+ux": "#BCB594", "me+ux+wear": "#3A1A14",
+};
+const REGION_TEXT = {
+  "wear": "#FAF0E2", "me": "#FAF0E2", "me+wear": "#FAF0E2", "me+ux+wear": "#FAF0E2",
+  "ux": "#2A1414", "ux+wear": "#2A1414", "me+ux": "#2A1414",
+};
+
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const NS = "http://www.w3.org/2000/svg";
+const key = sets => [...sets].sort().join("+");
+const pad = n => String(n).padStart(2, "0");
+const regionName = k => k === "me+ux+wear" ? "Human-Centered Design" : k.split("+").map(s => SETS[s].label).join(" ∩ ");
+const svgEl = (tag, attrs = {}) => { const e = document.createElementNS(NS, tag); for (const a in attrs) e.setAttribute(a, attrs[a]); return e; };
+
+/* ---------- Venn: hover regions ---------- */
+const defs = $("#venn-defs"), regionsG = $("#regions"), itemsG = $("#venn-items");
+for (const [k,[cx,cy,r]] of Object.entries(CIRCLES)) {
+  const cp = svgEl("clipPath", { id: "c-" + k }); cp.appendChild(svgEl("circle", { cx, cy, r })); defs.appendChild(cp);
+}
+const regionEls = {};
+Object.keys(REGION_POS).forEach(k => {
+  const inSets = k.split("+"), outSets = Object.keys(CIRCLES).filter(s => !inSets.includes(s));
+  const mask = svgEl("mask", { id: "m-" + k });
+  mask.appendChild(svgEl("rect", { x: 0, y: 0, width: 600, height: 580, fill: "white" }));
+  outSets.forEach(s => { const [cx,cy,r] = CIRCLES[s]; mask.appendChild(svgEl("circle", { cx, cy, r, fill: "black" })); });
+  defs.appendChild(mask);
+  const clipped = fill => {
+    let node = svgEl("rect", { x: 0, y: 0, width: 600, height: 580, mask: `url(#m-${k})`, fill });
+    inSets.forEach(s => { const g = svgEl("g", { "clip-path": `url(#c-${s})` }); g.appendChild(node); node = g; });
+    return node;
+  };
+  const f = svgEl("g", { class: "fill" }); f.appendChild(clipped(REGION_FILL[k])); $("#fills").appendChild(f);
+  const wrap = svgEl("g", { class: "region" }); wrap.appendChild(clipped("var(--ink)")); regionsG.appendChild(wrap);
+  regionEls[k] = wrap;
+});
+
+/* ---------- Venn: items ---------- */
+const byRegion = {};
+PROJECTS.forEach(p => (byRegion[key(p.sets)] ||= []).push(p));
+for (const [k,[x,y]] of Object.entries(REGION_POS)) {
+  if (k === "me+ux+wear") {
+    const t = svgEl("text", { class: "hcd", x, y: y - 17, "text-anchor": "middle", style: `fill:${REGION_TEXT[k]}` });
+    ["HUMAN", "CENTERED", "DESIGN"].forEach((w,i) => { const s = svgEl("tspan", { x, dy: i ? 20 : 0 }); s.textContent = w; t.appendChild(s); });
+    itemsG.appendChild(t);
+    continue;
+  }
+  const list = byRegion[k] || [];
+  list.forEach((p,i) => {
+    const t = svgEl("text", { class: "item", x, y, "data-region": k, "data-i": i, "data-n": list.length, "text-anchor": "middle", tabindex: 0, role: "button", style: `fill:${REGION_TEXT[k]}` });
+    // optional shorter name just for the Venn; "\n" splits it into stacked lines
+    (p.vennTitle || p.title).split("\n").forEach((w, j) => { const s = svgEl("tspan", { x, dy: j ? "1.1em" : 0 }); s.textContent = w; t.appendChild(s); });
+    t.addEventListener("click", e => { e.stopPropagation(); openProject(p.id); });
+    t.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openProject(p.id); } });
+    itemsG.appendChild(t);
+  });
+}
+
+/* ---------- Venn: auto-layout of project names ----------
+   Each name clusters around the middle of its section and is nudged until its whole
+   text box sits at least EDGE units inside the section (≈3px on screen) without touching another name. */
+let EDGE = 4; const GAP = 4; // EDGE is recomputed so it equals 3 screen px (plus the ring's half-stroke)
+function inRegion(x, y, k, m) {
+  const ins = k.split("+");
+  for (const [s, [cx, cy, r]] of Object.entries(CIRCLES)) {
+    const d = Math.hypot(x - cx, y - cy);
+    if (ins.includes(s) ? d > r - m : d < r + m) return false;
+  }
+  return true;
+}
+function boxFits(b, k) {
+  const xs = [b.x, b.x + b.width / 2, b.x + b.width], ys = [b.y, b.y + b.height / 2, b.y + b.height];
+  return xs.every(x => ys.every(y => inRegion(x, y, k, EDGE)));
+}
+const overlaps = (a, b) => !(a.x + a.width + GAP < b.x || b.x + b.width + GAP < a.x || a.y + a.height + GAP < b.y || b.y + b.height + GAP < a.y);
+function regionCenter(k) {
+  let sx = 0, sy = 0, n = 0;
+  for (let x = 0; x < 600; x += 3) for (let y = 0; y < 580; y += 3) if (inRegion(x, y, k, 0)) { sx += x; sy += y; n++; }
+  return [sx / n, sy / n];
+}
+/* Optional shift of a section's cluster point (SVG units). Wearables sits lower, closer to its circle's middle. */
+const REGION_NUDGE = { wear: [0, 14] };
+function layoutItems() {
+  const sc = document.getElementById("venn").getBoundingClientRect().width / 600 || 1;
+  EDGE = 3 / sc + 0.75; // 3px on screen, measured from the outside of the 1.5-wide ring
+  const placed = [];
+  const centers = {};
+  itemsG.querySelectorAll(".item").forEach(t => {
+    const k = t.dataset.region, i = +t.dataset.i, n = +t.dataset.n;
+    const [cx, cy] = centers[k] ||= (([x, y], [dx, dy]) => [x + dx, y + dy])(regionCenter(k), REGION_NUDGE[k] || [0, 0]);
+    // gentle scatter: rows around the center, alternating left/right
+    const want = [cx + (n > 1 ? (i % 2 ? 1 : -1) * 12 : 0), cy + (i - (n - 1) / 2) * 26];
+    const lines = t.querySelectorAll("tspan").length;
+    const tryAt = (x, y) => { t.setAttribute("x", x); t.querySelectorAll("tspan").forEach(s => s.setAttribute("x", x)); t.setAttribute("y", y + 5 - (lines - 1) * 8); const b = t.getBBox(); return boxFits(b, k) && !placed.some(p => overlaps(p, b)) ? b : null; };
+    t.style.fontSize = "";
+    let box = null;
+    // if a name can't fit anywhere at full size, step its size down a little until it does
+    for (let fs = 0; !box && fs <= 8; fs++) {
+      if (fs) t.style.fontSize = (14.5 - fs * 0.5) + "px";
+      box = tryAt(...want);
+      for (let rad = 2; !box && rad <= 120; rad += 2)
+        for (let a = 0; a < 24 && !box; a++) box = tryAt(want[0] + Math.cos(a / 24 * 2 * Math.PI) * rad, want[1] + Math.sin(a / 24 * 2 * Math.PI) * rad);
+    }
+    if (!box) { tryAt(...want); box = t.getBBox(); }
+    placed.push(box);
+  });
+}
+layoutItems();
+(document.fonts ? document.fonts.ready : Promise.resolve()).then(layoutItems);
+let relayout; addEventListener("resize", () => { clearTimeout(relayout); relayout = setTimeout(layoutItems, 150); });
+
+const venn = $("#venn"), caption = $("#venn-caption");
+let DEFAULT_CAP = ""; // becomes the hint once the Venn finishes drawing
+let hintDismissed = false; // after the first project click, the hint never comes back
+/* after the first project click, or ~5s of the hint, the filters take over the caption line */
+const capSlot = $("#cap-slot"); let filtersT, unhoverT;
+function filtersOn() { // ~5s after the hint: the bars slide in and the hint fades away for good
+  clearTimeout(filtersT);
+  if (!navShown) { navShown = true; updateNav(); }
+  hintDismissed = true;
+  if (caption.textContent === DEFAULT_CAP && DEFAULT_CAP) {
+    caption.style.transition = "opacity 700ms ease"; caption.style.opacity = "0";
+    setTimeout(() => { if (!hoverKey) caption.textContent = ""; caption.style.opacity = ""; caption.style.transition = ""; }, 720);
+  }
+  DEFAULT_CAP = "";
+}
+function showHint() {
+  if (hintDismissed) return;
+  filtersT = setTimeout(filtersOn, 5700);
+  DEFAULT_CAP = "[ click on a project to learn more ]";
+  if (hoverKey) return;
+  caption.style.transition = "none"; caption.style.opacity = "0"; caption.textContent = DEFAULT_CAP;
+  requestAnimationFrame(() => requestAnimationFrame(() => { caption.style.transition = "opacity 700ms ease"; caption.style.opacity = "1"; }));
+}
+function dismissHint() {
+  hintDismissed = true;
+  if (caption.textContent === DEFAULT_CAP) caption.textContent = "";
+  DEFAULT_CAP = "";
+}
+let hoverKey = null;
+function pointToKey(evt) {
+  const pt = venn.createSVGPoint(); pt.x = evt.clientX; pt.y = evt.clientY;
+  const p = pt.matrixTransform(venn.getScreenCTM().inverse());
+  const inside = Object.entries(CIRCLES).filter(([,[cx,cy,r]]) => (p.x-cx)**2 + (p.y-cy)**2 <= r*r).map(([k]) => k);
+  return inside.length ? key(inside) : null;
+}
+venn.addEventListener("pointermove", e => {
+  const k = pointToKey(e);
+  if (k === hoverKey) return;
+  if (hoverKey) regionEls[hoverKey].classList.remove("on");
+  hoverKey = k;
+  clearTimeout(unhoverT);
+  if (k) { regionEls[k].classList.add("on"); caption.textContent = `[ ${regionName(k)} ]`; capSlot.classList.add("hovering"); }
+  else { caption.textContent = DEFAULT_CAP; unhoverT = setTimeout(() => capSlot.classList.remove("hovering"), 300); }
+});
+venn.addEventListener("pointerleave", () => {
+  if (hoverKey) regionEls[hoverKey].classList.remove("on"); hoverKey = null; caption.textContent = DEFAULT_CAP;
+  clearTimeout(unhoverT); unhoverT = setTimeout(() => capSlot.classList.remove("hovering"), 300); // short pause so the row doesn't flicker
+});
+venn.addEventListener("click", e => {
+  e.stopPropagation();
+  const k = pointToKey(e); if (!k) return;
+  setFilter(k === "me+ux+wear" ? "all" : k);
+  goProjects();
+});
+
+/* ---------- Intro sequence ---------- */
+/* Each page is its own full-height section; it animates in when scrolled into view */
+const steps = [...document.querySelectorAll(".step")];
+let userInteracted = false; // set on the visitor's first scroll, tap or key press
+function reveal(s) {
+  s.classList.add("is-current");
+  // only after the visitor has actually scrolled/tapped: tighten the intro once they move past it.
+  // Before any scroll, "Hi, I'm Annie" stays (e.g. when the page reopens partway down).
+  if (userInteracted && (s === steps[2] || s === steps[3])) compact();
+  if (s === steps[steps.length - 1]) {
+    setTimeout(() => { if (userInteracted || autoIdx >= steps.length - 1) compact(); }, 2800); // after the Venn finishes drawing
+    setTimeout(showHint, 3000);
+  }
+}
+function compact() {
+  const stage = $("#stage"); if (stage.classList.contains("compact")) return;
+  const anchor = steps[steps.length - 1], before = anchor.getBoundingClientRect().top;
+  stage.classList.add("compact"); document.documentElement.classList.add("compact");
+  centerIntro();
+  scrollBy(0, anchor.getBoundingClientRect().top - before); // keep the Venn where it was on screen
+}
+/* Keep "Annie So" + studies block vertically centered in the window at any size */
+function centerIntro() {
+  const stage = $("#stage"); if (!stage.classList.contains("compact")) return;
+  const a = steps[0].firstElementChild.getBoundingClientRect().height;
+  const b = steps[1].firstElementChild.getBoundingClientRect().height;
+  const gap = 18, free = Math.max(48, (innerHeight - (a + b + gap)) / 2);
+  stage.style.setProperty("--h1", `${free + a + gap / 2}px`);
+  stage.style.setProperty("--h2", `${free + b + gap / 2}px`);
+}
+addEventListener("resize", centerIntro);
+function startReveal() {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) { steps.forEach(reveal); return; }
+  const io = new IntersectionObserver(entries => entries.forEach(en => {
+    if (en.isIntersecting) { reveal(en.target); io.unobserve(en.target); }
+  }), { threshold: 0.35 });
+  steps.forEach(s => io.observe(s));
+}
+
+/* Auto-scroll: after each page's hold time, glide down to the next page.
+   Stops for good as soon as the visitor scrolls, taps, or presses a key. */
+const SCROLL_MS = 1400;
+let autoIdx = 0, autoTimer = null, autoOn = true, raf = null;
+const root = document.documentElement;
+function glideTo(el) {
+  const start = scrollY, end = el.getBoundingClientRect().top + scrollY, t0 = performance.now();
+  root.style.scrollSnapType = "none";
+  const ease = p => p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+  const frame = t => {
+    const p = Math.min(1, (t - t0) / SCROLL_MS);
+    scrollTo(0, start + (end - start) * ease(p));
+    if (p < 1 && autoOn) raf = requestAnimationFrame(frame);
+    else root.style.scrollSnapType = "";
+  };
+  raf = requestAnimationFrame(frame);
+}
+function scheduleNext(delay) {
+  if (!autoOn || autoIdx >= steps.length - 1) return;
+  autoTimer = setTimeout(() => {
+    autoIdx++;
+    glideTo(steps[autoIdx]);
+    scheduleNext(SCROLL_MS + STEP_TIMES[autoIdx]);
+  }, delay);
+}
+function stopAuto() {
+  userInteracted = true;
+  steps[2].classList.add("instant"); // polaroid page: skip the one-by-one animation
+  if (steps[2].classList.contains("is-current")) compact(); // already past the intro
+  if (!autoOn) return;
+  autoOn = false; clearTimeout(autoTimer); cancelAnimationFrame(raf); root.style.scrollSnapType = "";
+}
+["wheel", "touchstart", "keydown", "pointerdown"].forEach(ev => addEventListener(ev, stopAuto, { passive: true }));
+/* Gentle snap: when the visitor stops scrolling near a page, ease it into place (polaroids + Venn centered,
+   intro pages aligned to the top) with a soft deceleration instead of the browser's abrupt snap.
+   Any new wheel, touch, key or click cancels the glide immediately. */
+let snapT = null, snapRaf = null, snapping = false;
+/* phones / touch screens: no automatic re-centering — only Home / Projects / About move the page */
+const noAutoSnap = matchMedia("(max-width: 768px), (pointer: coarse)");
+function gentleSnap() {
+  if (noAutoSnap.matches) return;
+  if (autoOn && autoIdx < steps.length - 1) return;         // the intro autoplay is driving the scroll
+  if (document.querySelector("dialog[open]")) return;        // a panel or pop-up is open
+  const vh = innerHeight, compactOn = $("#stage").classList.contains("compact");
+  let best = null;
+  steps.forEach((s, i) => {
+    // tightened intro: "Annie So" + studies form one full-screen page (sized so its block is centered when it starts at the top)
+    if (compactOn && i === 1) return;
+    const r = s.getBoundingClientRect();
+    const delta = i >= 2 ? (r.top + r.height / 2) - vh / 2 : r.top;
+    if (best === null || Math.abs(delta) < Math.abs(best)) best = delta;
+  });
+  // About page: settle with its top tucked right under the top bar so it fills the view
+  const ab = $("#about");
+  if (ab && !document.querySelector(".hob-panel.open")) {
+    const d = ab.getBoundingClientRect().top - $("#topnav").offsetHeight;
+    if (best === null || Math.abs(d) < Math.abs(best)) best = d;
+  }
+  // open project window: settle with the line over the cards on the top bar's line (its layout height, not mid-slide)
+  let projSnap = false;
+  if ($("#proj-wrap").classList.contains("open")) {
+    const d = projDelta();
+    if (Math.abs(d) <= 0.5) return;                                   // already lined up
+    if (d > -vh * 0.2 && d < vh * 0.55 && (best === null || Math.abs(d) < Math.abs(best))) { best = d; projSnap = true; }
+  }
+  // reading the project list: leave the scroll alone
+  const pr = $("#projects").getBoundingClientRect();
+  if (!projSnap && pr.top < vh * 0.5 && pr.bottom > vh * 0.5) return;
+  // otherwise settle onto whichever page is nearest, even from half a screen away
+  if (best === null || Math.abs(best) < 2 || Math.abs(best) > vh * 0.55) return;
+  const start = scrollY, end = scrollY + best, t0 = performance.now();
+  const dur = Math.min(1400, 650 + Math.abs(best) * 2.2);
+  const ease = p => -(Math.cos(Math.PI * p) - 1) / 2;        // sine ease-in-out: starts and ends at rest, no jolt
+  snapping = true;
+  const step = t => {
+    if (!snapping) return;
+    const p = Math.min(1, (t - t0) / dur);
+    scrollTo(0, start + (end - start) * ease(p));
+    if (p < 1) snapRaf = requestAnimationFrame(step); else snapping = false;
+  };
+  snapRaf = requestAnimationFrame(step);
+}
+addEventListener("scroll", () => { if (snapping) return; clearTimeout(snapT); snapT = setTimeout(gentleSnap, 120); }, { passive: true }); // starts ~0.1s after scrolling stops
+["wheel", "touchstart", "keydown", "pointerdown"].forEach(ev => addEventListener(ev, () => {
+  if (snapping) { snapping = false; cancelAnimationFrame(snapRaf); }
+  clearTimeout(snapT); clearTimeout(goT); // the visitor took over the scroll
+}, { passive: true }));
+function startAuto() {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches || scrollY > 10) { autoOn = false; steps[2].classList.add("instant"); return; }
+  scheduleNext(STEP_TIMES[0]);
+}
+
+/* ---------- Index ---------- */
+const smoothMo = () => matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+/* jump to the cards so the line over them lands on the top bar's line.
+   The bars are switched on first (they add the bottom space the page needs to scroll that far),
+   then once the cards have unfolded, any small leftover gap is closed. Measured with offsetHeight,
+   which ignores the bar's slide-in animation. */
+let goT;
+// the line over the project window lands on the top bar's line (layout height, not mid-slide)
+const projDelta = () => $(".proj-in").getBoundingClientRect().top - ($("#topnav").offsetHeight - 1);
+function goProjects() {
+  navShown = true; updateNav();
+  requestAnimationFrame(() => {
+    $("#projects").scrollIntoView({ behavior: smoothMo() });
+    clearTimeout(goT);
+    goT = setTimeout(() => {
+      const d = projDelta();
+      if (Math.abs(d) > 0.5 && Math.abs(d) < 120) scrollBy({ top: d, behavior: smoothMo() });
+    }, 800);
+  });
+}
+const FILTERS = [["all","all projects"], ["me","mechanical engineering"], ["wear","wearables"], ["ux","cx"]];
+let filter = null; // null = cards folded away
+const chips = $("#chips"), grid = $("#grid"), note = $("#filter-note");
+FILTERS.forEach(([k,l]) => {
+  const b = document.createElement("button");
+  b.className = "chip"; b.type = "button"; b.dataset.k = k;
+  b.innerHTML = (SETS[k] ? `<span class="dot-c" style="--c:${SETS[k].color}"></span>` : "") + l;
+  b.addEventListener("click", () => {
+    const closing = k === filter;
+    setFilter(closing ? null : k);
+    // opening: glide down to the cards; folding: settle back on the Venn
+    if (closing) $(".step-venn").scrollIntoView({ behavior: smoothMo(), block: "center" });
+    else goProjects();
+  });
+  chips.appendChild(b);
+});
+function fitChips() { chips.classList.toggle("stacked", innerWidth <= 500); } // one line on anything wider than 500px
+addEventListener("resize", fitChips);
+(document.fonts ? document.fonts.ready : Promise.resolve()).then(fitChips);
+function setFilter(k) {
+  filter = k;
+  if (k) setView("project"); // filters (and the Venn) always show the cards
+  [...chips.children].forEach(c => c.setAttribute("aria-pressed", String(c.dataset.k === k)));
+  $("#proj-wrap").classList.toggle("open", !!k);
+  if (!k) return; // folded: keep the last cards in place so the fold animates smoothly
+  note.hidden = true; // no "[ showing … ]" label for intersections
+  renderGrid();
+}
+/* ---------- By skill: families → skills → every project's write-up for that skill ---------- */
+const SKILL_FAMILIES = [
+  ["technical", [
+    ["mechanical design", ["Mechanical Design", "Mechanical Design & Finite Element Analysis"]],
+    ["FEA", ["Finite Element Analysis", "Mechanical Design & Finite Element Analysis"]],
+    ["prototyping", ["Prototyping", "Wearable Technology & Prototyping"]],
+    ["fabrication", ["Fabrication"]],
+    ["systems", ["Systems Integration"]],
+    ["wearables", ["Wearable Technology & Soft Electronics", "Wearable Technology & Prototyping"]],
+    ["materials research", ["Materials Research & Development", "Experimental Design"]],
+  ]],
+  ["design", [
+    ["human-centered", ["Human-Centered Design", "User Needfinding"]],
+    ["product & UI/UX", ["Concept Development", "UI/UX Design"]],
+  ]],
+  ["interpersonal", [
+    ["communication", ["Technical Communication", "Design Communication", "Cross-Cultural Communication", "Effective Communication & Active Listening", "Adaptability"]],
+    ["leadership", ["Leadership", "Strategic Decision-Making"]],
+    ["project mgmt", ["Project Management", "Event Planning"]],
+    ["outreach", ["Community Outreach"]],
+    ["hospitality", ["Hospitality", "Customer Service"]],
+  ]],
+];
+let view = "project", skFam = "technical", skPick = "mechanical design";
+function setView(v) {
+  view = v;
+  const sk = v === "skill";
+  document.querySelectorAll(".vtabs [data-v]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === v)));
+  chips.hidden = sk; grid.hidden = sk;
+  $("#skill-nav").hidden = !sk; $("#skill-results").hidden = !sk;
+  if (sk) renderSkills();
+  else if (!filter) setFilter("all"); // back on "By field" with nothing picked: show all projects
+}
+document.querySelector(".vtabs").addEventListener("click", e => { const b = e.target.closest("[data-v]"); if (b) setView(b.dataset.v); });
+function renderSkills() {
+  $("#fam-row").innerHTML = SKILL_FAMILIES.map(([f]) => `<button type="button" class="sv-btn" data-f="${f}" aria-pressed="${f === skFam}">${f}</button>`).join("");
+  const fam = SKILL_FAMILIES.find(([f]) => f === skFam)[1];
+  if (!fam.some(([n]) => n === skPick)) skPick = fam[0][0];
+  $("#sk-row").innerHTML = fam.map(([n]) => `<button type="button" class="sv-btn" data-s="${n}" aria-pressed="${n === skPick}">${n}</button>`).join("");
+  const names = fam.find(([n]) => n === skPick)[1];
+  const hits = PROJECTS.filter(p => (p.skills || []).some(([n]) => names.includes(n))).sort(byNum);
+  $("#skill-results").innerHTML = hits.map(p => `
+    <div class="sk-grp">
+      <button type="button" class="sk-pj" data-id="${p.id}" aria-label="Open ${p.panelTitle || p.title}">
+        <b>${p.panelTitle || p.title}</b><span><span class="dot-c" style="--c:${dotFill(p)}"></span>${p.year || ""}</span>
+      </button>
+      <div class="sk-blks">${p.skills.filter(([n]) => names.includes(n)).map(([n, t]) => `<div><p class="sk-sub">${n}</p><p class="sk-txt">${t}</p></div>`).join("")}</div>
+    </div>`).join("");
+}
+$("#fam-row").addEventListener("click", e => { const b = e.target.closest("[data-f]"); if (!b) return; skFam = b.dataset.f; skPick = null; renderSkills(); });
+$("#sk-row").addEventListener("click", e => { const b = e.target.closest("[data-s]"); if (!b) return; skPick = b.dataset.s; renderSkills(); });
+$("#skill-results").addEventListener("click", e => { const b = e.target.closest(".sk-pj"); if (b) openProject(b.dataset.id); });
+/* corner dot: one category = solid; two = split on the diagonal (top-right → bottom-left), lower-numbered category top-left */
+function dotFill(p) {
+  const cs = [...p.sets].sort((a, b) => SETS[a].num.localeCompare(SETS[b].num)).map(s => SETS[s].color);
+  return cs.length > 1 ? `linear-gradient(135deg, ${cs[0]} 0 50%, ${cs[1]} 50% 100%)` : (p.dot || cs[0]);
+}
+// order cards by their category numbers: (01), (01)(02), (01)(03), (02), (02)(03), (03)
+function byNum(a, b) {
+  const nums = p => p.sets.map(s => SETS[s].num).sort();
+  if (!!a.first !== !!b.first) return a.first ? -1 : 1; // projects marked `first` lead the list (SPEAC, Feig Lab)
+  const x = nums(a), y = nums(b);
+  for (let i = 0; i < Math.max(x.length, y.length); i++) {
+    if (x[i] === undefined) return -1; if (y[i] === undefined) return 1;
+    if (x[i] !== y[i]) return x[i].localeCompare(y[i]);
+  }
+  return 0;
+}
+function renderGrid() {
+  const want = filter === "all" ? null : filter.split("+");
+  const list = PROJECTS.filter(p => !want || want.every(s => p.sets.includes(s))).sort(byNum);
+  grid.innerHTML = "";
+  list.forEach(p => {
+    const n = PROJECTS.indexOf(p);
+    const c = document.createElement("button");
+    c.className = "card"; c.type = "button";
+    c.style.setProperty("--c", p.color || SHEETS[n % SHEETS.length]);
+    c.innerHTML = `<span class="sheet">
+        ${p.cutout ? `<img class="cutout" src="${p.cutout}" alt="" style="--tilt:${p.tilt ?? -8}deg;${p.cutoutW ? `width:${p.cutoutW};` : ""}${p.cutoutAlign === "right" ? "justify-self:end;" : ""}${p.cutoutAlignY === "bottom" ? "align-self:end;" : ""}${p.cutoutFit === "height" ? "position:absolute;top:0;left:50%;height:100%;width:auto;translate:-50% 0;" : ""}${p.cutoutFit === "cover" ? "position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" : ""}${p.shiftY ? `translate:0 ${p.shiftY}px;` : ""}${p.cutoutPos === "top-left" ? "position:absolute;top:0;left:0;" : ""}${p.cutoutPos === "top-right" ? "position:absolute;top:0;right:0;" : ""}${p.cutoutPos === "bottom-left" ? "position:absolute;bottom:0;left:0;" : ""}">` : ""}
+        <span class="tab dot-c" style="--c:${dotFill(p)}"></span>
+      </span>
+      <span class="foot"><h3>${p.title}</h3><span class="mono">${[...p.sets].sort((a, b) => SETS[a].num.localeCompare(SETS[b].num)).map(s => `(${SETS[s].num})`).join(" ")}</span></span>`;
+    c.addEventListener("click", () => openProject(p.id));
+    grid.appendChild(c);
+  });
+  if (!list.length) grid.innerHTML = `<p class="empty">No projects here yet.</p>`;
+}
+
+/* ---------- Drawer ---------- */
+const drawer = $("#drawer");
+/* Project files: saved through the viewer's download prompt (plain download links don't work inside the artifact frame) */
+const dl = (window.claude && claude.use) ? claude.use("downloads").catch(() => null) : Promise.resolve(null);
+/* Manila folder tabs: one tab per file; the open folder shows its cover page and actions */
+function renderFolders(files) {
+  const box = $("#d-files");
+  box.closest(".d-files").hidden = !files.length; // no files → no files section at all
+  if (!files.length) { box.innerHTML = ""; return; }
+  box.innerHTML = `<div class="folder-tabs" role="tablist" aria-label="Project files">${files.map((f, i) =>
+      `<button type="button" role="tab" class="folder-tab" id="ftab-${i}" aria-controls="fbody" aria-selected="false" data-i="${i}">${f.tab || f.name}</button>`).join("")}</div>
+    <div class="folder-body" id="fbody" role="tabpanel"></div>`;
+  const tabs = [...box.querySelectorAll(".folder-tab")];
+  const show = i => {
+    const f = files[i];
+    tabs.forEach((t, j) => t.setAttribute("aria-selected", String(j === i)));
+    $("#fbody").setAttribute("aria-labelledby", "ftab-" + i);
+    $("#fbody").classList.toggle("is-video", f.kind === "VIDEO");
+    if (f.kind === "VIDEO") {
+      // Super 8 film strip: sprocket holes on both sides, edge print below
+      $("#fbody").innerHTML = `
+        <figure class="film">
+          <div class="film-frame" style="aspect-ratio:${f.aspect || "4 / 3"};${f.maxW ? `max-width:${f.maxW};margin-inline:auto;` : ""}">
+            <video src="${f.path}" ${f.cover ? `poster="${f.cover}"` : ""} controls playsinline preload="metadata"></video>
+            <div class="film-grain" aria-hidden="true"></div>
+          </div>
+          <figcaption><span>${f.frame || (i + 1) + "A"} ▸</span><span>${f.name}</span></figcaption>
+        </figure>`;
+      const v = $("#fbody video"), g = $("#fbody .film-grain");
+      v.addEventListener("play", () => g.classList.add("on"));
+      v.addEventListener("pause", () => g.classList.remove("on"));
+      return;
+    }
+    $("#fbody").innerHTML = `
+      <a class="folder-cover" href="${f.path}" target="_blank" rel="noopener" aria-label="Open ${f.name}">${f.cover ? `<img src="${f.cover}" alt="">` : ""}</a>
+      <div class="folder-info">
+        <div class="f-name">${f.name}</div>
+        <div class="f-meta mono">${f.kind}${f.pages ? ` · ${f.pages} pages` : ""}${f.size ? ` · ${f.size}` : ""}</div>
+        <div class="f-actions"><a class="f-btn" href="${f.path}" target="_blank" rel="noopener">${f.kind === "LINK" ? "open" : "view"}</a>${f.kind === "LINK" ? "" : `<button type="button" class="f-btn" id="fdl">download</button>`}</div>
+      </div>`;
+    if (f.kind !== "LINK") $("#fdl").addEventListener("click", e => downloadFile(f, e.currentTarget));
+  };
+  tabs.forEach((t, i) => {
+    t.addEventListener("click", () => show(i));
+    t.addEventListener("keydown", e => {
+      if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+      const n = (i + (e.key === "ArrowRight" ? 1 : -1) + tabs.length) % tabs.length; tabs[n].focus(); show(n);
+    });
+  });
+  show(0);
+}
+async function downloadFile(f, btn) {
+  const label = btn.textContent; btn.textContent = "preparing…"; btn.disabled = true;
+  try {
+    const downloads = await dl;
+    if (!downloads) { // regular website (own domain): a plain browser download
+      const a = document.createElement("a"); a.href = f.path; a.download = f.path.split("/").pop();
+      document.body.appendChild(a); a.click(); a.remove(); btn.textContent = label; return;
+    }
+    const blob = await (await fetch(f.path)).blob();
+    await downloads.save({ filename: f.path.split("/").pop(), data: blob });
+    btn.textContent = label;
+  } catch (e) {
+    btn.textContent = label;
+    if (!e || e.code !== "dismissed") showToast(f.kind === "PDF" ? "Download unavailable here. Use view instead." : "Download unavailable in this view.");
+  } finally { btn.disabled = false; }
+}
+function openProject(id) {
+  const p = PROJECTS.find(x => x.id === id); if (!p) return;
+  dismissHint();
+  const n = PROJECTS.indexOf(p);
+  $("#d-title").textContent = p.panelTitle || p.title; // optional longer heading inside the panel
+  $("#d-region").textContent = regionName(key(p.sets));
+  $("#d-hero").style.setProperty("--c", p.color || SHEETS[n % SHEETS.length]);
+  $("#d-hero").innerHTML = p.cutout ? `<img class="cutout" src="${p.cutoutPanel || p.cutout}" alt="${p.title}" style="--tilt:${p.tilt ?? -8}deg;${p.cutoutWPanel ? `width:${p.cutoutWPanel}` : ""}">` : "";
+  $("#d-hero").hidden = !p.cutout; // in the panel the cut-out sits straight on the page; no cut-out, no hero
+  $("#d-role").textContent = p.role || "—";
+  // no role given for a project → hide the role row entirely
+  $("#d-role").hidden = $("#d-role").previousElementSibling.hidden = !p.role && !!(p.skills || p.year);
+  $("#d-year").textContent = p.year || "—";
+  const skills = p.skills || [];
+  const slug = s => "sk-" + s.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+  // skills row: each skill jumps to its block in the description below
+  const ds = $("#d-skills");
+  ds.innerHTML = skills.length ? skills.map(([s]) => `<button type="button" class="skill-link" data-go="${slug(s)}">${s}</button>`).join("") : "—";
+  ds.querySelectorAll(".skill-link").forEach(b => b.addEventListener("click", () => {
+    const el = document.getElementById(b.dataset.go); if (!el) return;
+    el.scrollIntoView({ behavior: smooth(), block: "center" });
+    el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash");
+  }));
+  const textOf = Object.fromEntries(skills);
+  const groups = p.groups || (skills.length ? [["", skills.map(([s]) => s)]] : []);
+  $("#d-skillblocks").innerHTML = groups.map(([g, names]) => `<section class="skillgroup">${g ? `<h3>${g}</h3>` : ""}
+    ${names.map(s => `<p class="skillblock" id="${slug(s)}">${textOf[s] || ""}</p>`).join("")}</section>`).join("");
+  $("#d-body").hidden = skills.length > 0;
+  document.querySelector(".drawer .meta").hidden = !!p.noMeta;
+  renderBook(p.book || []); // no role / year / skills rows for this project
+  $("#d-body").textContent = p.body || `Placeholder: the problem, your process, sketches and prototypes, and the outcome for ${p.title}.`;
+  renderFolders(p.files || []);
+  drawer.showModal();
+}
+/* Swatch book (Textile Development): one page at a time, click to flip */
+let book = [], bookI = 0;
+function renderBook(pages) {
+  book = pages; bookI = 0;
+  $("#d-book").hidden = !pages.length;
+  if (pages.length) showPage(0, false);
+  pages.forEach(pg => { const im = new Image(); im.src = pg.src; }); // preload so flips are instant
+}
+function showPage(i, animate = true) {
+  bookI = (i + book.length) % book.length;
+  const img = $("#d-book-img"), pg = book[bookI];
+  const swap = () => { img.src = pg.src; img.alt = pg.title; $("#d-book-cap").textContent = `${pg.title} · ${bookI + 1} / ${book.length}`; };
+  if (!animate) return swap();
+  img.classList.add("turning");
+  setTimeout(() => { swap(); img.classList.remove("turning"); }, 180);
+}
+$("#d-book-pg").addEventListener("click", () => showPage(bookI + 1));
+$("#d-book").querySelectorAll("[data-b]").forEach(b => b.addEventListener("click", () => showPage(bookI + +b.dataset.b)));
+$("#d-close").addEventListener("click", () => drawer.close());
+drawer.addEventListener("click", e => { if (e.target === drawer) drawer.close(); });
+// after viewing a project, the top and bottom bars appear (and stay) wherever the visitor is
+drawer.addEventListener("close", () => { const a = document.activeElement; if (a && a.classList && a.classList.contains("item")) a.blur(); });
+drawer.addEventListener("close", () => { if (!navShown) setTimeout(() => { navShown = true; updateNav(); }, 500); });
+
+/* ---------- About content: EDIT these lists ----------
+   CELLO:    { title, where: "YouTube / SoundCloud…", url } — no url shows "link coming soon".
+   DRAWINGS: { src: "image URL", caption } — empty src shows a blank sheet.
+   PHOTOS:   { src: "image URL", caption } — empty src shows a placeholder frame. */
+/* WIP: the photo + caption that pops up from "this" */
+const WIP = { src: "img/wip-journal.jpg", caption: "daily gratitude sketch journal!" };
+const CELLO = [ /* { title, composer, url } — composer shows on the right; opens the YouTube video in a new tab */
+  { title: "Arpeggione Sonata in A minor - I. Allegro moderato", composer: "Franz Schubert", url: "https://youtu.be/MPJsj5EJnVI" },
+  { title: "Suite 3 in C Major, BWV 1009 - Prelude", composer: "J.S. Bach", url: "https://youtu.be/-M51OxR7eSU" },
+  { title: "Cello Concerto No.1 in E flat major, Op. 107 - I. Allegretto", composer: "Dmitri Shostakovich", url: "https://youtu.be/wmlpMowjkP8" },
+  { title: "Suite 2 in D minor, BWV 1008 - Prelude", composer: "J.S. Bach", url: "https://youtu.be/asUQ2m9qUmo" },
+  { title: "Variations on One String on a Theme by Rossini - Intro, Tema, Var I,II,III", composer: "Niccolo Paganini", url: "https://youtu.be/1Re2tKVvy7k" },
+  { title: "Cello Concerto in B minor, Op. 104 - I. Allegro", composer: "Antonín Dvořák", url: "https://youtu.be/aggxA8O7exs" },
+  { title: "Cello Concerto No. 1 in G minor, Op. 49", composer: "Dmitri Kabalevsky", url: "https://youtu.be/1xL_3-_lS00" },
+  { title: "Elegie for Solo Violoncello", composer: "Robertson", url: "https://youtu.be/PTXeTxuR98I" },
+  { title: "Cello Concerto No. 1 in C major, Hob. VIIb:1 - I. Moderato", composer: "Joseph Haydn", url: "https://youtu.be/NJyi3D51iSg" },
+  { title: "Suite 1 in G Major, BWV 1007 - Prelude", composer: "J.S. Bach", url: "https://youtu.be/06DWxkwaAZE" },
+  { title: "Cello Concerto in A Minor, Op. 33 - I. Allegro non troppo", composer: "Camille Saint-Saëns", url: "https://youtu.be/9Iq-USeD6N0" },
+];
+const DRAWINGS = {
+  "digital oil": [
+    { title: "Portrait no. 1", src: "img/drawings/oil-1.jpg", thumb: "img/drawings/oil-1-th.jpg" },
+    { title: "Portrait no. 2", src: "img/drawings/oil-3.jpg", thumb: "img/drawings/oil-3-th.jpg" },
+    { title: "Portrait no. 3", src: "img/drawings/oil-2.jpg", thumb: "img/drawings/oil-2-th.jpg" },
+  ],
+  "sketchbook": [
+    { title: "Welcome to Stanford!", date: "09.24.2025", src: "img/drawings/sketch-1.jpg", thumb: "img/drawings/sketch-1-th.jpg" },
+    { title: "Brunch with DP1 Group", date: "09.26.2025", src: "img/drawings/sketch-2.jpg", thumb: "img/drawings/sketch-2-th.jpg" },
+    { title: "Lane Reading Room's View", date: "09.28.2025", src: "img/drawings/sketch-3.jpg", thumb: "img/drawings/sketch-3-th.jpg" },
+    { title: "Love, On Call", date: "09.29.2025", src: "img/drawings/sketch-4.jpg", thumb: "img/drawings/sketch-4-th.jpg" },
+  ],
+  "random": [
+    { title: "Digital Watercolor", src: "img/drawings/rand-1.jpg", thumb: "img/drawings/rand-1-th.jpg" },
+    { title: "Hand", src: "img/drawings/rand-2.jpg", thumb: "img/drawings/rand-2-th.jpg" },
+    { title: "Facial Shadow Study", src: "img/drawings/rand-3.jpg", thumb: "img/drawings/rand-3-th.jpg" },
+    { title: "Stan Marsh", src: "img/drawings/rand-4.jpg", thumb: "img/drawings/rand-4-th.jpg" },
+    { title: "Experimental!", src: "img/drawings/rand-5.jpg", thumb: "img/drawings/rand-5-th.jpg" },
+  ],
+};
+const PHOTOS = Array.from({ length: 8 }, () => ({ src: "", caption: "caption" }));
+const wip = $("#wip");
+if (WIP.src) $("#wip-photo").innerHTML = `<img src="${WIP.src}" alt="${WIP.caption}">`;
+$("#wip-caption").textContent = WIP.caption;
+$("#wip-btn").addEventListener("click", () => wip.showModal());
+wip.addEventListener("click", e => { if (!e.target.closest(".wip-card")) wip.close(); }); // click outside the polaroid closes it
+$("#cello-list").innerHTML = CELLO.map((m, i) => {
+  const inner = `<span class="n">${String(i + 1).padStart(2, "0")}</span>
+    <span class="t">${m.title.split(" - ")[0]}${m.title.includes(" - ") ? `<i>${m.title.split(" - ").slice(1).join(" - ")}</i>` : ""}</span>
+    <span class="m">${m.composer || ""}</span>
+    <span class="go" aria-hidden="true">${m.url ? "↗" : ""}</span>`;
+  return `<li>${m.url ? `<a class="row" href="${m.url}" target="_blank" rel="noopener" aria-label="Watch ${m.title} on YouTube (opens in a new tab)">${inner}</a>` : `<div class="row soon">${inner}</div>`}</li>`;
+}).join("");
+/* Drawings: manila folder — tabs per category, clipped thumbnails, click to open with prev/next */
+{
+  const tabs = $("#draw-tabs"), folder = $("#draw-folder");
+  const ROT = [-2, 1.5, -1, 2, -1.5, 1];
+  const cats = Object.keys(DRAWINGS);
+  let cat = cats.find(k => DRAWINGS[k].length) || cats[0], idx = null;
+  tabs.innerHTML = cats.map(k => `<button type="button" class="dtab" role="tab" data-k="${k}">${k}<span>${DRAWINGS[k].length}</span></button>`).join("");
+  const render = () => {
+    tabs.querySelectorAll(".dtab").forEach(t => t.setAttribute("aria-selected", String(t.dataset.k === cat)));
+    const L = DRAWINGS[cat];
+    if (!L.length) { folder.innerHTML = `<p class="d-empty">[ ${cat} drawings coming soon ]</p>`; return; }
+    if (idx === null) {
+      folder.innerHTML = `<div class="drawings">${L.map((d, i) => `
+        <button type="button" class="d-it" style="transform:rotate(${ROT[i % ROT.length]}deg)" data-i="${i}" aria-label="Open ${d.title}">
+          <span class="clip" aria-hidden="true"></span>
+          <div class="d-paper"><img src="${d.thumb || d.src}" alt="" loading="lazy"></div>
+          <div class="nm">${d.title.toLowerCase()}</div>
+        </button>`).join("")}</div>`;
+    } else {
+      const d = L[idx];
+      folder.innerHTML = `
+        <div class="d-view">
+          <div class="d-full"><img src="${d.src}" alt="${d.title}"></div>
+          <div class="d-meta">
+            <div class="d-cat">${cat}</div>
+            <h3>${d.title}</h3>
+            ${d.date ? `<p class="d-date">${d.date}</p>` : ""}
+            <div class="d-ctr">
+              <button type="button" class="f-btn" data-a="prev" aria-label="Previous drawing" style="min-width:36px">←</button>
+              <button type="button" class="f-btn" data-a="next" aria-label="Next drawing" style="min-width:36px">→</button>
+              <button type="button" class="f-btn" data-a="back">back to folder</button>
+              <span class="count">${idx + 1} / ${L.length}</span>
+            </div>
+          </div>
+        </div>
+        <div class="d-strip">${L.map((x, i) => `<button type="button" data-j="${i}" aria-label="${x.title}" aria-current="${i === idx}" style="background-image:url('${x.thumb || x.src}')"></button>`).join("")}</div>`;
+    }
+  };
+  tabs.addEventListener("click", e => { const b = e.target.closest(".dtab"); if (!b) return; cat = b.dataset.k; idx = null; render(); });
+  folder.addEventListener("click", e => {
+    const L = DRAWINGS[cat];
+    const it = e.target.closest(".d-it"); if (it) { idx = +it.dataset.i; render(); return; }
+    const a = e.target.closest("[data-a]");
+    if (a) { idx = a.dataset.a === "prev" ? (idx - 1 + L.length) % L.length : a.dataset.a === "next" ? (idx + 1) % L.length : null; render(); return; }
+    const j = e.target.closest("[data-j]"); if (j) { idx = +j.dataset.j; render(); }
+  });
+  render();
+}
+
+/* Hobby drop-downs: one open at a time */
+const hobLinks = [...document.querySelectorAll(".hob")], hobPanels = [...document.querySelectorAll(".hob-panel")];
+function openHob(name) {
+  hobPanels.forEach(p => p.classList.toggle("open", p.dataset.hob === name));
+  hobLinks.forEach(l => l.setAttribute("aria-expanded", String(l.dataset.hob === name)));
+}
+hobLinks.forEach(l => l.addEventListener("click", () => openHob(l.getAttribute("aria-expanded") === "true" ? null : l.dataset.hob)));
+document.querySelectorAll(".hob-close").forEach(b => b.addEventListener("click", () => openHob(null)));
+
+/* ---------- Top nav + contact ---------- */
+const nav = $("#topnav"), projectsEl = $("#projects");
+const smooth = () => matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+let navShown = false; // once the bar has appeared, it stays for the rest of the visit
+function updateNav() {
+  const inProjects = projectsEl.getBoundingClientRect().top < innerHeight * 0.6;
+  if (inProjects) navShown = true;
+  nav.classList.toggle("show", navShown);
+  $("#bottombar").classList.toggle("show", navShown);
+  document.body.classList.toggle("bars-on", navShown);
+  const inAbout = $("#about").getBoundingClientRect().top < innerHeight * 0.5;
+  nav.querySelectorAll("[data-go]").forEach(b => b.setAttribute("aria-current", b.dataset.go === (inAbout ? "about" : inProjects ? "projects" : "stage")));
+}
+// Copy email + toast
+const toast = $("#toast"); let toastT;
+function showToast(msg) { toast.textContent = msg; toast.classList.add("show"); clearTimeout(toastT); toastT = setTimeout(() => toast.classList.remove("show"), 2200); }
+$("#copy-email").addEventListener("click", () => {
+  const addr = "annieso@stanford.edu";
+  const ok = () => showToast("Email link copied!");
+  const fail = () => showToast("Couldn’t copy. The address is " + addr);
+  try { navigator.clipboard.writeText(addr).then(ok, fail); } catch { fail(); }
+});
+const setBarHeight = () => {
+  document.body.style.setProperty("--bbh", $("#bottombar").offsetHeight + "px");
+  document.body.style.setProperty("--nvh", $("#topnav").offsetHeight + "px");
+};
+setBarHeight(); addEventListener("resize", setBarHeight);
+(document.fonts ? document.fonts.ready : Promise.resolve()).then(setBarHeight);
+addEventListener("scroll", updateNav, { passive: true });
+addEventListener("resize", updateNav);
+nav.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => {
+  if (b.dataset.go === "projects") { if (!filter) setFilter("all"); goProjects(); return; } // Projects in the bar opens the cards
+  if (b.dataset.go === "stage") { setFilter(null); openHob(null); scrollTo({ top: 0, behavior: smooth() }); } // Home folds away the project cards and the cello / drawings drop-downs
+  else document.getElementById(b.dataset.go).scrollIntoView({ behavior: smooth() });
+}));
+updateNav();
+
+/* ---------- Start ---------- */
+setFilter(null);
+fitChips();
+requestAnimationFrame(() => requestAnimationFrame(() => { startReveal(); startAuto(); }));
+</script>
+
+</body>
+</html>
